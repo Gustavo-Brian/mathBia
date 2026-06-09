@@ -642,6 +642,63 @@
       background: linear-gradient(90deg, var(--primary), var(--accent));
     }
 
+
+    button:disabled,
+    .button[aria-disabled="true"] {
+      opacity: .58;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    button:disabled:hover,
+    .button[aria-disabled="true"]:hover {
+      border-color: var(--border);
+      box-shadow: none;
+    }
+    .practice-session-summary {
+      margin: .85rem 0 0;
+      color: var(--muted);
+      font-weight: 750;
+      overflow-wrap: anywhere;
+    }
+    .question-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+      align-items: stretch;
+      width: 100%;
+    }
+    .question-actions button { width: 100%; }
+    .question-toolbar {
+      align-items: flex-start;
+      gap: .65rem;
+    }
+    .question-meta {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+    .question-progress-line {
+      display: flex;
+      justify-content: space-between;
+      gap: .75rem;
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 750;
+      margin: .65rem 0 .35rem;
+    }
+    .question-progress-line span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .question-panel.is-done {
+      border-color: color-mix(in srgb, var(--success) 50%, var(--border));
+      background: color-mix(in srgb, var(--success) 5%, var(--surface));
+    }
+    .question-panel.is-wrong {
+      border-color: color-mix(in srgb, var(--danger) 45%, var(--border));
+      background: color-mix(in srgb, var(--danger) 4%, var(--surface));
+    }
+
     .sr-only {
       position: absolute;
       width: 1px;
@@ -837,6 +894,7 @@
       </div>
       <button id="start-practice" class="primary" type="button">Gerar lista</button>
     </div>
+    <p id="practice-session-summary" class="practice-session-summary" aria-live="polite">Escolha as opções e gere uma lista para começar.</p>
     <div class="practice-controls toolbar">
       <div class="button-row">
         <button id="shuffle-questions" type="button">Embaralhar</button>
@@ -848,7 +906,8 @@
       </div>
     </div>
     <div id="question-panel" class="question-panel" aria-live="polite"></div>
-    <div class="button-row">
+    <div class="button-row question-actions" aria-label="Controles da questão">
+      <button id="previous-question" type="button">Questão anterior</button>
       <button id="check-answer" class="primary" type="button">Verificar resposta</button>
       <button id="retry-question" type="button">Tentar novamente</button>
       <button id="next-question" class="accent" type="button">Próxima questão</button>
@@ -862,7 +921,7 @@
     <div class="form-grid">
       <div>
         <label for="errors-level">Filtrar por nível</label>
-        <select id="errors-level" onchange="document.dispatchEvent(new Event('click'))">
+        <select id="errors-level">
           <option value="todos">Todos</option>
           <option value="basico">Básico</option>
           <option value="intermediario">Intermediário</option>
@@ -977,6 +1036,7 @@
           <li>Alt + S: mostrar ou ocultar menu</li>
           <li>Alt + T: alternar tema</li>
           <li>Alt + D: mostrar próxima dica</li>
+          <li>Alt + esquerda/direita: navegar entre questões</li>
           <li>Alt + Enter: verificar resposta</li>
           <li>Esc: fechar janela aberta</li>
         </ul>
@@ -1574,6 +1634,7 @@
     renderExamples();
     setupPractice();
     renderErrors();
+    setupErrorFilters();
     setupNotes();
     setupTimer();
     setupPrintList();
@@ -1625,6 +1686,8 @@
     start.addEventListener('click', startPractice);
     const check = byId('check-answer');
     if (check) check.addEventListener('click', checkAnswer);
+    const previous = byId('previous-question');
+    if (previous) previous.addEventListener('click', previousQuestion);
     const next = byId('next-question');
     if (next) next.addEventListener('click', nextQuestion);
     const hint = byId('show-hint');
@@ -1635,68 +1698,211 @@
     if (retry) retry.addEventListener('click', retryQuestion);
     const shuffle = byId('shuffle-questions');
     if (shuffle) shuffle.addEventListener('click', () => {
+      if (!session.questions.length) return;
+      persistCurrentAnswer();
       session.questions = shuffleArray(session.questions);
       session.index = 0;
       renderQuestion();
     });
     const focus = byId('focus-mode');
     if (focus) focus.addEventListener('click', () => document.body.classList.toggle('focus-mode'));
+    const mode = byId('practice-mode');
+    if (mode) mode.addEventListener('change', syncPracticeOptions);
+    const level = byId('practice-level');
+    if (level) level.addEventListener('change', renderPracticeSessionSummary);
+    syncPracticeOptions();
     startPractice();
   }
 
+  function labelPracticeMode(mode) {
+    return { padrao: 'Sessão padrão', rapida: 'Sessão rápida', intensiva: 'Sessão intensiva', livre: 'Prática livre', erros: 'Revisão de erros' }[mode] || mode;
+  }
+
+  function syncPracticeOptions() {
+    const mode = byId('practice-mode') ? byId('practice-mode').value : 'padrao';
+    const quantity = byId('practice-quantity');
+    if (quantity) {
+      const free = mode === 'livre';
+      quantity.disabled = !free;
+      quantity.setAttribute('aria-disabled', String(!free));
+    }
+  }
+
+  function initQuestionRuntime(q) {
+    q.done = false;
+    q.correct = false;
+    q.userAnswer = '';
+    q.attempts = 0;
+    q.hintsUsed = 0;
+    q.revealed = false;
+    return q;
+  }
+
+  function questionRuntime(q) {
+    if (!q) return null;
+    if (typeof q.done !== 'boolean') q.done = false;
+    if (typeof q.correct !== 'boolean') q.correct = false;
+    if (typeof q.userAnswer !== 'string') q.userAnswer = '';
+    if (!Number.isFinite(q.attempts)) q.attempts = 0;
+    if (!Number.isFinite(q.hintsUsed)) q.hintsUsed = 0;
+    if (typeof q.revealed !== 'boolean') q.revealed = false;
+    return q;
+  }
+
+  function sessionDoneCount() {
+    return session.questions.filter((q) => q.done).length;
+  }
+
+  function sessionCorrectCount() {
+    return session.questions.filter((q) => q.done && q.correct).length;
+  }
+
+  function renderPracticeSessionSummary(extra) {
+    const target = byId('practice-session-summary');
+    if (!target) return;
+    const total = session.questions.length;
+    const done = sessionDoneCount();
+    const correct = sessionCorrectCount();
+    const mode = session.mode ? labelPracticeMode(session.mode) : labelPracticeMode(byId('practice-mode') ? byId('practice-mode').value : 'padrao');
+    const level = session.level ? labelLevel(session.level) : labelLevel(byId('practice-level') ? byId('practice-level').value : 'misto');
+    const base = total ? mode + ' | ' + level + ' | ' + total + ' questões | ' + done + ' respondidas | ' + correct + ' acertos' : 'Nenhuma lista gerada.';
+    target.textContent = extra ? base + ' | ' + extra : base;
+  }
+
   function startPractice() {
+    syncPracticeOptions();
     const level = byId('practice-level') ? byId('practice-level').value : 'misto';
     const mode = byId('practice-mode') ? byId('practice-mode').value : 'padrao';
-    const quantity = mode === 'rapida' ? 5 : mode === 'intensiva' ? 20 : mode === 'livre' ? Number(byId('practice-quantity').value || 10) : mode === 'erros' ? 20 : 10;
+    const quantityInput = byId('practice-quantity');
+    const customQuantity = Number(quantityInput ? quantityInput.value : 10);
+    const quantity = mode === 'rapida' ? 5 : mode === 'intensiva' ? 20 : mode === 'livre' ? Math.max(1, Math.min(55, Number.isFinite(customQuantity) ? customQuantity : 10)) : mode === 'erros' ? 20 : 10;
     let questions;
     if (mode === 'erros') {
       questions = errorQuestions(DATA.module.key);
+      if (level !== 'misto') questions = questions.filter((q) => q.level === level);
     } else {
       const levels = level === 'misto' ? ['basico', 'intermediario', 'avancado'] : [level];
       questions = levels.flatMap((lvl, i) => buildQuestions(DATA.module.key, lvl, lvl === 'avancado' ? 15 : 20, Date.now() + i * 37));
     }
     if (!questions.length) {
-      setFeedback('Não há questões disponíveis para esse filtro. Tente outro nível ou faça uma sessão comum.', 'incorrect');
+      const message = 'Não há questões disponíveis para esse filtro. Tente outro nível ou faça uma sessão comum.';
+      session.bank = [];
+      session.questions = [];
+      session.index = 0;
+      renderPracticeSessionSummary('sem questões para esse filtro');
+      const panel = byId('question-panel');
+      if (panel) {
+        panel.classList.remove('is-done', 'is-wrong');
+        panel.innerHTML = '<p>' + message + '</p>';
+      }
+      renderQuestionControls();
       return;
     }
+    session.mode = mode;
+    session.level = level;
     session.bank = questions;
-    session.questions = shuffleArray(questions).slice(0, Math.max(1, Math.min(quantity, questions.length)));
+    session.questions = shuffleArray(questions).slice(0, Math.max(1, Math.min(quantity, questions.length))).map(initQuestionRuntime);
     session.index = 0;
     session.attempts = 0;
     session.hintsUsed = 0;
     session.revealed = false;
+    renderPracticeSessionSummary('lista gerada');
     renderQuestion();
   }
 
   function currentQuestion() {
-    return session.questions[session.index];
+    return questionRuntime(session.questions[session.index]);
+  }
+
+  function persistCurrentAnswer() {
+    const q = currentQuestion();
+    if (!q) return;
+    q.userAnswer = readAnswer(q);
+  }
+
+  function restoreAnswer(q) {
+    if (!q || !q.userAnswer) return;
+    if (q.type === 'multipla' || q.type === 'vf') {
+      qsa('input[name="answer-choice"]').forEach((input) => { input.checked = input.value === String(q.userAnswer); });
+      return;
+    }
+    const input = byId('answer-input');
+    if (input) input.value = q.userAnswer;
+  }
+
+  function renderQuestionControls() {
+    const q = currentQuestion();
+    const hasQuestions = Boolean(session.questions.length && q);
+    const done = sessionDoneCount();
+    const total = session.questions.length;
+    const percent = total ? Math.round((done / total) * 100) : 0;
+    qsa('[data-session-done]').forEach((node) => node.textContent = done);
+    qsa('[data-session-total]').forEach((node) => node.textContent = total);
+    qsa('[data-session-percent]').forEach((node) => node.textContent = percent + '%');
+    qsa('[data-session-progress]').forEach((node) => node.style.setProperty('--value', percent + '%'));
+    const previous = byId('previous-question');
+    if (previous) previous.disabled = !hasQuestions || session.index <= 0;
+    const next = byId('next-question');
+    if (next) next.disabled = !hasQuestions || session.index >= total - 1;
+    const check = byId('check-answer');
+    if (check) check.disabled = !hasQuestions || q.done;
+    const retry = byId('retry-question');
+    if (retry) retry.disabled = !hasQuestions || q.done || (!q.attempts && !q.userAnswer);
+    const hint = byId('show-hint');
+    if (hint) hint.disabled = !hasQuestions || q.done || !q.hints || q.hintsUsed >= q.hints.length;
+    const reveal = byId('show-solution');
+    if (reveal) reveal.disabled = !hasQuestions;
+    const shuffle = byId('shuffle-questions');
+    if (shuffle) shuffle.disabled = !hasQuestions;
+    renderPracticeSessionSummary();
   }
 
   function renderQuestion() {
     const q = currentQuestion();
     const panel = byId('question-panel');
-    if (!panel || !q) return;
-    session.attempts = 0;
-    session.hintsUsed = 0;
-    session.revealed = false;
-    const progress = session.questions.length ? ((session.index) / session.questions.length) * 100 : 0;
+    if (!panel) return;
+    if (!q) {
+      panel.classList.remove('is-done', 'is-wrong');
+      panel.innerHTML = '<p>Gere uma lista para começar a prática.</p>';
+      renderQuestionControls();
+      return;
+    }
+    session.attempts = q.attempts;
+    session.hintsUsed = q.hintsUsed;
+    session.revealed = q.revealed;
+    const done = sessionDoneCount();
+    const total = session.questions.length;
+    const progress = total ? (done / total) * 100 : 0;
+    const status = q.done ? (q.correct ? 'Respondida' : 'Registrada para revisão') : q.attempts ? 'Em tentativa' : 'Em aberto';
+    const statusClass = q.done ? (q.correct ? 'success' : 'danger') : q.attempts ? 'warning' : '';
+    panel.classList.toggle('is-done', Boolean(q.done && q.correct));
+    panel.classList.toggle('is-wrong', Boolean(q.done && !q.correct));
     const input = renderAnswerInput(q);
     panel.innerHTML =
-      '<div class="toolbar"><span class="badge">' + labelLevel(q.level) + '</span><span class="badge">' + escapeHtml(labelType(q.type)) + '</span><span>Questão ' + (session.index + 1) + ' de ' + session.questions.length + '</span></div>' +
-      '<div class="progress" aria-label="Progresso da sessão"><span style="--value:' + progress + '%"></span></div>' +
+      '<div class="toolbar question-toolbar"><div class="question-meta"><span class="badge">' + labelLevel(q.level) + '</span><span class="badge">' + escapeHtml(labelType(q.type)) + '</span><span class="badge">Questão ' + (session.index + 1) + ' de ' + total + '</span><span class="badge ' + statusClass + '">' + status + '</span></div><span class="badge">Tentativas ' + q.attempts + '/3</span></div>' +
+      '<div class="question-progress-line"><span><span data-session-done>' + done + '</span> de <span data-session-total>' + total + '</span> respondidas</span><span data-session-percent>' + Math.round(progress) + '%</span></div>' +
+      '<div class="progress" aria-label="Progresso da sessão"><span data-session-progress style="--value:' + progress + '%"></span></div>' +
       '<h3>' + escapeHtml(q.prompt) + '</h3>' +
       (q.context ? '<p>' + escapeHtml(q.context) + '</p>' : '') +
       input +
-      '<div id="feedback" class="feedback" aria-live="polite">Digite sua resposta e clique em verificar. Você tem até três tentativas antes da resolução completa aparecer.</div>' +
+      '<div id="feedback" class="feedback" aria-live="polite">' + (q.done ? (q.correct ? 'Resposta registrada como correta. Use Próxima questão para continuar.' : 'Questão registrada para revisão. Abra a resolução para comparar o raciocínio.') : 'Digite sua resposta e clique em verificar. Você tem até três tentativas antes da resolução completa aparecer.') + '</div>' +
       '<div id="hint-box" class="callout warning" hidden></div>' +
       '<div id="solution-box" class="callout" hidden></div>';
+    restoreAnswer(q);
     const answer = byId('answer-input');
-    if (answer) answer.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        checkAnswer();
-      }
-    });
+    if (answer) {
+      answer.addEventListener('input', persistCurrentAnswer);
+      answer.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          checkAnswer();
+        }
+      });
+    }
+    qsa('input[name="answer-choice"]').forEach((inputNode) => inputNode.addEventListener('change', persistCurrentAnswer));
+    if (q.hintsUsed > 0) renderHintBox(q);
+    if (q.revealed) renderSolutionBox(q);
+    renderQuestionControls();
     renderModuleProgress();
   }
 
@@ -1724,28 +1930,43 @@
   function checkAnswer() {
     const q = currentQuestion();
     if (!q) return;
+    if (q.done) {
+      setFeedback('Esta questão já foi registrada. Avance, volte ou gere uma nova lista.', 'correct');
+      return;
+    }
     const answer = readAnswer(q);
+    q.userAnswer = answer;
     if (!safeText(answer).trim()) {
       setFeedback('Informe uma resposta antes de verificar.', 'incorrect');
       return;
     }
-    session.attempts += 1;
+    q.attempts += 1;
+    session.attempts = q.attempts;
     const ok = validateAnswer(q, answer);
     if (ok) {
       registerAnswer(q, answer, true);
-      setFeedback('Resposta correta. ' + (q.verification || 'A verificação confirma o resultado.'), 'correct');
+      const finished = sessionDoneCount() === session.questions.length;
+      setFeedback('Resposta correta. ' + (q.verification || 'A verificação confirma o resultado.') + (finished ? ' Sessão concluída.' : ''), 'correct');
       playSound(true);
     } else {
-      const message = session.attempts >= 3 ? 'A resposta ainda não está correta. A resolução completa foi liberada para você comparar o raciocínio.' : 'A resposta não está correta. ' + q.error;
+      const finalAttempt = q.attempts >= 3;
+      const message = finalAttempt ? 'A resposta ainda não está correta. A questão foi registrada para revisão e a resolução completa foi liberada.' : 'A resposta não está correta. ' + q.error;
       setFeedback(message, 'incorrect');
-      if (session.attempts >= 3) revealSolution(false);
+      if (finalAttempt) {
+        registerAnswer(q, answer, false);
+        revealSolution(false);
+      }
       playSound(false);
     }
+    renderQuestionControls();
   }
 
   function registerAnswer(q, answer, correct) {
     if (q.done) return;
     q.done = true;
+    q.correct = Boolean(correct);
+    q.userAnswer = safeText(answer);
+    q.completedAt = new Date().toISOString();
     const stats = moduleState(DATA.module.key);
     stats.answered += 1;
     if (correct) {
@@ -1762,8 +1983,8 @@
         expected: formatExpected(q),
         level: q.level,
         type: q.type,
-        attempts: session.attempts,
-        hints: session.hintsUsed,
+        attempts: q.attempts,
+        hints: q.hintsUsed,
         concept: q.concept,
         solution: q.steps,
         date: new Date().toISOString(),
@@ -1771,7 +1992,7 @@
       });
       stats.errors = stats.errors.slice(0, 120);
     }
-    stats.hints += session.hintsUsed;
+    stats.hints += q.hintsUsed;
     stats.levelStats[q.level] = stats.levelStats[q.level] || { answered: 0, correct: 0 };
     stats.levelStats[q.level].answered += 1;
     if (correct) stats.levelStats[q.level].correct += 1;
@@ -1792,42 +2013,77 @@
     feedback.className = 'feedback ' + (type || '');
   }
 
-  function showHint() {
-    const q = currentQuestion();
+  function renderHintBox(q) {
     const box = byId('hint-box');
-    if (!q || !box) return;
-    const hint = q.hints[Math.min(session.hintsUsed, q.hints.length - 1)];
-    session.hintsUsed += 1;
+    if (!q || !box || !q.hints || !q.hints.length || q.hintsUsed <= 0) return;
+    const index = Math.min(q.hintsUsed, q.hints.length) - 1;
     box.hidden = false;
-    box.innerHTML = '<strong>Dica ' + session.hintsUsed + ':</strong> ' + escapeHtml(hint);
+    box.innerHTML = '<strong>Dica ' + q.hintsUsed + ':</strong> ' + escapeHtml(q.hints[index]);
   }
 
-  function revealSolution(ask = true) {
+  function showHint() {
     const q = currentQuestion();
+    if (!q || q.done) return;
+    if (!q.hints || q.hintsUsed >= q.hints.length) {
+      setFeedback('Todas as dicas desta questão já foram exibidas.', 'incorrect');
+      renderQuestionControls();
+      return;
+    }
+    q.hintsUsed += 1;
+    session.hintsUsed = q.hintsUsed;
+    renderHintBox(q);
+    renderQuestionControls();
+  }
+
+  function renderSolutionBox(q) {
     const box = byId('solution-box');
     if (!q || !box) return;
-    if (ask && state.settings.confirmReveal && !confirm('Mostrar a resolução completa desta questão?')) return;
-    if (!session.revealed) {
-      moduleState(DATA.module.key).resolutionViews += 1;
-      session.revealed = true;
-      save();
-    }
     box.hidden = false;
     box.innerHTML = '<strong>Resolução comentada</strong>' + renderSteps(q.steps) + '<p><strong>Resposta esperada:</strong> <span class="formula">' + escapeHtml(formatExpected(q)) + '</span></p><p>' + escapeHtml(q.verification || '') + '</p>';
   }
 
-  function retryQuestion() {
+  function revealSolution(ask = true) {
     const q = currentQuestion();
     if (!q) return;
-    q.done = false;
+    if (ask && state.settings.confirmReveal && !confirm('Mostrar a resolução completa desta questão?')) return;
+    if (!q.revealed) {
+      moduleState(DATA.module.key).resolutionViews += 1;
+      q.revealed = true;
+      session.revealed = true;
+      save();
+    }
+    renderSolutionBox(q);
+    renderQuestionControls();
+  }
+
+  function retryQuestion() {
+    const q = currentQuestion();
+    if (!q || q.done) return;
+    q.userAnswer = '';
+    q.attempts = 0;
+    q.hintsUsed = 0;
+    q.revealed = false;
+    renderQuestion();
+  }
+
+  function autoRegisterCurrentIfAttempted() {
+    const q = currentQuestion();
+    if (!q || q.done) return;
+    persistCurrentAnswer();
+    if (q.attempts > 0) registerAnswer(q, q.userAnswer, false);
+  }
+
+  function previousQuestion() {
+    if (!session.questions.length || session.index <= 0) return;
+    autoRegisterCurrentIfAttempted();
+    session.index -= 1;
     renderQuestion();
   }
 
   function nextQuestion() {
-    if (!session.questions.length) return;
-    const q = currentQuestion();
-    if (q && !q.done && session.attempts > 0) registerAnswer(q, readAnswer(q), false);
-    session.index = (session.index + 1) % session.questions.length;
+    if (!session.questions.length || session.index >= session.questions.length - 1) return;
+    autoRegisterCurrentIfAttempted();
+    session.index += 1;
     renderQuestion();
   }
 
@@ -1876,6 +2132,13 @@
       error: 'Esse item entrou no caderno porque houve erro em uma tentativa anterior.',
       verification: 'Ao acertar novamente, marque o erro como revisado.'
     }));
+  }
+
+  function setupErrorFilters() {
+    const level = byId('errors-level');
+    if (level) level.addEventListener('change', renderErrors);
+    const openOnly = byId('errors-open-only');
+    if (openOnly) openOnly.addEventListener('change', renderErrors);
   }
 
   function setupNotes() {
@@ -2001,6 +2264,8 @@
       save();
     }
     if (event.key.toLowerCase() === 'd') { event.preventDefault(); showHint(); }
+    if (event.key === 'ArrowLeft') { event.preventDefault(); previousQuestion(); }
+    if (event.key === 'ArrowRight') { event.preventDefault(); nextQuestion(); }
     if (event.key === 'Enter') { event.preventDefault(); checkAnswer(); }
   }
 
