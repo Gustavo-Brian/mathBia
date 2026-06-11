@@ -1251,6 +1251,7 @@
 
   const DATA = JSON.parse(document.getElementById('page-data').textContent);
   const NS = 'plataformaEquacoes.v1';
+  const SESSION_UNLOCK_KEY = NS + ':sessionUnlocked';
   const DEFAULT_SUPABASE_TABLE = 'user_progress';
   const SUPABASE_FALLBACK_CONFIG = {
     url: 'https://hkkkbqclfqdyexqwvnrd.supabase.co',
@@ -1770,6 +1771,17 @@
     });
   }
 
+  function sessionUnlocked() {
+    try { return sessionStorage.getItem(SESSION_UNLOCK_KEY) === '1'; } catch (error) { return false; }
+  }
+
+  function setSessionUnlocked(value) {
+    try {
+      if (value) sessionStorage.setItem(SESSION_UNLOCK_KEY, '1');
+      else sessionStorage.removeItem(SESSION_UNLOCK_KEY);
+    } catch (error) {}
+  }
+
   function renderCloudPanel() {
     const configured = hasSupabaseConfig() && Boolean(window.supabase && window.supabase.createClient);
     cloudState.configured = configured;
@@ -1906,6 +1918,7 @@
       setSyncStatus('Não consegui entrar. Confira o nome e a senha.', 'danger', true);
       return;
     }
+    setSessionUnlocked(true);
     cloudState.user = response.data.user;
     switchAccountStorage(cloudState.user ? cloudState.user.id : '');
     renderCloudPanel();
@@ -1927,6 +1940,7 @@
       return;
     }
     const sessionUser = response.data.session && response.data.session.user ? response.data.session.user : null;
+    setSessionUnlocked(Boolean(sessionUser));
     cloudState.user = sessionUser;
     if (cloudState.user) switchAccountStorage(cloudState.user.id);
     renderCloudPanel();
@@ -1941,6 +1955,7 @@
     const client = getSupabaseClient();
     if (!client) return;
     await client.auth.signOut();
+    setSessionUnlocked(false);
     cloudState.user = null;
     switchAccountStorage('');
     renderCloudPanel();
@@ -1977,12 +1992,14 @@
     }
     try {
       const sessionResponse = await client.auth.getSession();
-      cloudState.user = sessionResponse.data && sessionResponse.data.session ? sessionResponse.data.session.user : null;
+      const savedUser = sessionResponse.data && sessionResponse.data.session ? sessionResponse.data.session.user : null;
+      cloudState.user = sessionUnlocked() ? savedUser : null;
       switchAccountStorage(cloudState.user ? cloudState.user.id : '');
       renderCloudPanel();
       if (cloudState.user) await pullCloudProgress();
       client.auth.onAuthStateChange((_event, sessionData) => {
-        cloudState.user = sessionData && sessionData.user ? sessionData.user : null;
+        const eventUser = sessionData && sessionData.user ? sessionData.user : null;
+        cloudState.user = sessionUnlocked() ? eventUser : null;
         switchAccountStorage(cloudState.user ? cloudState.user.id : '');
         renderCloudPanel();
         if (cloudState.user) pullCloudProgress();

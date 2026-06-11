@@ -26,6 +26,8 @@ Use somente a chave publica `anon`/`publishable` no frontend. Nunca coloque a `s
 
 A interface mostra apenas `Nome` e `Senha`. Por baixo, o app transforma o nome em um identificador interno no formato `nome@mathbia.local`, porque o Supabase Auth trabalha com e-mail/senha.
 
+Uma nova aba sempre comeca na tela de cadastro/login. Depois que a pessoa entra, ela pode navegar entre os modulos naquela mesma aba sem precisar repetir o login.
+
 No painel do Supabase:
 
 1. Va em `Authentication > Providers`.

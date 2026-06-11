@@ -1,6 +1,6 @@
 # MathBia
 
-Plataforma estatica de estudos de equacoes, com login simples, teoria guiada, pratica interativa, estatisticas por usuario e sincronizacao via Supabase.
+Plataforma estatica de estudos de equacoes, com login simples, teoria guiada, pratica interativa, estatisticas por usuario e sincronizacao via Supabase. Uma nova aba sempre inicia na tela de cadastro/login; depois de entrar, a navegacao entre paginas continua liberada naquela aba.
 
 ## Arquivos principais
 
