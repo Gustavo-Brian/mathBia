@@ -107,6 +107,94 @@
     }
     .skip-link:focus { top: 1rem; }
     .app-shell { min-height: 100vh; }
+    body.auth-locked {
+      overflow: hidden;
+    }
+    body.auth-locked .app-shell,
+    body.auth-locked #settings-drawer {
+      display: none !important;
+    }
+    body:not(.auth-locked) .login-gate {
+      display: none;
+    }
+    .login-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: grid;
+      place-items: center;
+      padding: clamp(1rem, 4vw, 2rem);
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--surface-2) 72%, var(--surface)), var(--surface)),
+        var(--bg);
+      overflow: auto;
+    }
+    .login-card {
+      width: min(58rem, 100%);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(18rem, .95fr);
+      gap: clamp(1rem, 3vw, 1.5rem);
+      align-items: stretch;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .login-intro,
+    .login-form {
+      min-width: 0;
+      padding: clamp(1.1rem, 3vw, 2rem);
+    }
+    .login-intro {
+      display: grid;
+      align-content: center;
+      gap: .85rem;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 13%, var(--surface-2)), var(--surface-3));
+    }
+    .login-intro h1 {
+      margin: 0;
+      font-size: clamp(2rem, 7vw, 3.25rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    .login-benefits {
+      display: grid;
+      gap: .55rem;
+      margin: .2rem 0 0;
+      padding-left: 1.1rem;
+    }
+    .login-form {
+      display: grid;
+      align-content: center;
+      gap: .65rem;
+    }
+    .login-form h2,
+    .drawer-heading h2 {
+      margin: 0;
+      line-height: 1.15;
+    }
+    .login-form input,
+    .auth-fields input {
+      width: 100%;
+      min-height: 2.75rem;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: .7rem .8rem;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+    }
+    .auth-note {
+      color: var(--muted);
+      font-size: .92rem;
+      margin: .1rem 0 0;
+    }
+    .auth-actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: .35rem;
+    }
+
     .topbar {
       position: sticky;
       top: 0;
@@ -544,6 +632,88 @@
       box-shadow: var(--shadow);
     }
     .drawer.open { display: block; }
+    .profile-drawer {
+      display: none;
+      gap: .85rem;
+      padding: .9rem;
+    }
+    .profile-drawer.open {
+      display: grid;
+    }
+    .drawer-heading,
+    .drawer-section {
+      min-width: 0;
+    }
+    .drawer-heading {
+      display: grid;
+      gap: .35rem;
+      padding: .15rem .1rem .35rem;
+    }
+    .drawer-heading p {
+      margin: 0;
+      color: var(--muted);
+    }
+    .drawer-section {
+      display: grid;
+      gap: .65rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--surface-2) 42%, var(--surface));
+      padding: .85rem;
+    }
+    .drawer-section h3,
+    .drawer-section p {
+      margin: 0;
+    }
+    .profile-summary {
+      border-color: color-mix(in srgb, var(--primary) 34%, var(--border));
+      background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+    }
+    .auth-user {
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+    .auth-fields {
+      display: grid;
+      gap: .55rem;
+    }
+    .cloud-panel {
+      display: grid;
+      gap: .65rem;
+    }
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .35rem;
+      min-width: 0;
+    }
+    .segmented button {
+      width: 100%;
+      min-height: 2.45rem;
+      padding: .5rem .45rem;
+      font-size: .88rem;
+      white-space: normal;
+    }
+    .segmented button[aria-pressed="true"] {
+      background: var(--primary);
+      color: var(--on-primary);
+      border-color: var(--primary);
+    }
+    .reading-panel label {
+      color: var(--muted);
+      font-weight: 800;
+      margin-top: .15rem;
+    }
+    .reading-preview {
+      display: grid;
+      gap: .25rem;
+      padding: .75rem;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: .94rem;
+    }
+
     .timeline {
       display: grid;
       gap: .55rem;
@@ -569,6 +739,177 @@
     }
     .button-row > *, .hero-actions > *, .practice-controls > *, .settings-grid > * { min-width: 0; }
     .account-button { width: auto; padding-inline: 1rem; }
+    .theory-guide {
+      display: grid;
+      gap: 1rem;
+      min-width: 0;
+    }
+    .theory-hero,
+    .theory-section,
+    .theory-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 8px 24px rgba(23, 32, 51, 0.06);
+      min-width: 0;
+    }
+    .theory-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(14rem, 22rem);
+      gap: clamp(1rem, 3vw, 1.5rem);
+      align-items: stretch;
+      padding: clamp(1rem, 3vw, 1.4rem);
+      background: linear-gradient(135deg, color-mix(in srgb, var(--surface-2) 65%, var(--surface)), var(--surface));
+    }
+    .theory-hero h2,
+    .theory-section h3,
+    .theory-card h4 {
+      margin-top: 0;
+      line-height: 1.2;
+    }
+    .theory-lead {
+      font-size: 1.08rem;
+      font-weight: 650;
+      margin-bottom: .75rem;
+    }
+    .theory-aside {
+      display: grid;
+      gap: .65rem;
+      align-content: start;
+      border-radius: var(--radius);
+      padding: .85rem;
+      background: color-mix(in srgb, var(--surface-3) 62%, var(--surface));
+      border: 1px solid var(--border);
+    }
+    .theory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+      gap: .8rem;
+      min-width: 0;
+    }
+    .theory-section,
+    .theory-card {
+      padding: 1rem;
+    }
+    .theory-section {
+      display: grid;
+      gap: .75rem;
+    }
+    .theory-list {
+      display: grid;
+      gap: .55rem;
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+    .formula-list {
+      display: grid;
+      gap: .55rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .formula-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      min-width: 0;
+    }
+    .formula-list li::before {
+      content: "";
+      flex: 0 0 .5rem;
+      width: .5rem;
+      height: .5rem;
+      margin-top: .68rem;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .theory-visual {
+      display: grid;
+      gap: .55rem;
+      min-height: 8rem;
+      align-content: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: .75rem;
+      background: var(--surface);
+    }
+    .mini-number-line {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      align-items: center;
+      gap: .2rem;
+      position: relative;
+      padding-top: .9rem;
+    }
+    .mini-number-line::before {
+      content: "";
+      position: absolute;
+      left: 4%;
+      right: 4%;
+      top: 1.25rem;
+      height: 2px;
+      background: var(--border);
+    }
+    .mini-number-line span {
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      font-weight: 800;
+      font-size: .82rem;
+      color: var(--muted);
+      z-index: 1;
+    }
+    .mini-number-line span::before {
+      content: "";
+      width: .55rem;
+      height: .55rem;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--primary);
+      margin-bottom: .35rem;
+    }
+    .mini-flow {
+      display: grid;
+      gap: .5rem;
+    }
+    .mini-flow span {
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: .55rem .65rem;
+      background: color-mix(in srgb, var(--surface-2) 64%, var(--surface));
+      font-weight: 750;
+    }
+    .example-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: .9rem;
+      align-items: start;
+    }
+
+    @media (max-width: 720px) {
+      .login-gate {
+        align-items: start;
+      }
+      .login-card,
+      .theory-hero,
+      .example-split {
+        grid-template-columns: 1fr;
+      }
+      .auth-actions,
+      .segmented {
+        grid-template-columns: 1fr;
+      }
+      .login-intro h1 {
+        font-size: 2.35rem;
+      }
+      .profile-drawer {
+        right: .75rem;
+        left: .75rem;
+        width: auto;
+      }
+    }
+
     .didactic-content {
       display: grid;
       grid-template-columns: minmax(0, 1fr);
@@ -750,8 +1091,35 @@
     }
   </style>
 </head>
-<body>
+<body class="auth-locked">
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <section id="login-gate" class="login-gate" aria-labelledby="login-title">
+    <div class="login-card">
+      <div class="login-intro">
+        <p class="badge">Trilha de Equações</p>
+        <h1 id="login-title">Entre para estudar</h1>
+        <p>Crie uma conta simples para salvar estatísticas, continuar de onde parou e acompanhar sua evolução em teoria e prática.</p>
+        <ul class="login-benefits">
+          <li>Progresso separado para cada estudante.</li>
+          <li>Caderno de erros e histórico de questões.</li>
+          <li>Sincronização para testar em qualquer dispositivo.</li>
+        </ul>
+      </div>
+      <form id="login-form" class="login-form" autocomplete="on">
+        <h2>Conta simples</h2>
+        <p id="gate-status" class="sync-status" data-auth-status aria-live="polite">Entre ou crie sua conta para começar.</p>
+        <label for="gate-name">Nome</label>
+        <input id="gate-name" data-auth-name type="text" autocomplete="username" placeholder="Ex.: bia" maxlength="40">
+        <label for="gate-password">Senha</label>
+        <input id="gate-password" data-auth-password type="password" autocomplete="current-password" minlength="6" placeholder="Mínimo de 6 caracteres">
+        <div class="button-row auth-actions">
+          <button id="gate-signin" type="button">Entrar</button>
+          <button id="gate-signup" class="primary" type="button">Criar conta</button>
+        </div>
+        <p class="auth-note">Use um nome fácil de lembrar. A senha precisa ter pelo menos 6 caracteres por exigência do Supabase.</p>
+      </form>
+    </div>
+  </section>
   <div class="app-shell">
 
     <header class="topbar">
@@ -761,7 +1129,7 @@
       </a>
       <div class="top-actions">
         <button id="menu-toggle" class="icon-button mobile-only" type="button" aria-label="Mostrar menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-        <button id="settings-toggle" class="account-button" type="button" aria-label="Abrir conta e sincroniza&ccedil;&atilde;o" aria-expanded="false">Conta</button>
+        <button id="settings-toggle" class="account-button" type="button" aria-label="Abrir perfil e leitura" aria-expanded="false">Perfil</button>
       </div>
     </header>
 
@@ -773,7 +1141,7 @@
       <div>
         <p class="badge">Álgebra do básico ao avançado</p>
         <h1>Trilha de Equações</h1>
-        <p>Uma plataforma offline para estudar álgebra com teoria guiada, exemplos resolvidos, prática interativa, caderno de erros, progresso local e simulados.</p>
+        <p>Uma plataforma de estudo para avançar em álgebra com teoria guiada, exemplos resolvidos, prática interativa, caderno de erros, estatísticas por usuário e simulados.</p>
         <div class="hero-actions">
           <button id="continue-study" class="primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7L8 5Z" fill="currentColor"/></svg>Continuar de onde parei</button>
           <button id="start-study" type="button">Começar do início</button>
@@ -824,31 +1192,62 @@
       </main>
     </div>
   </div>
-    <aside id="settings-drawer" class="drawer" aria-label="Conta e sincroniza&ccedil;&atilde;o">
-      <h2>Conta</h2>
-      <p class="sync-status">Entre para manter suas estat&iacute;sticas sincronizadas por usu&aacute;rio.</p>
-      <section class="account-panel" aria-labelledby="account-title">
-        <h3 id="account-title">Sincroniza&ccedil;&atilde;o</h3>
-        <p id="sync-status" class="sync-status" aria-live="polite">Supabase n&atilde;o configurado.</p>
+        <aside id="settings-drawer" class="drawer profile-drawer" aria-label="Perfil e leitura">
+      <div class="drawer-heading">
+        <p class="badge">Perfil</p>
+        <h2>Conta e leitura</h2>
+        <p>Gerencie seu acesso e ajuste apenas o que ajuda a estudar com conforto.</p>
+      </div>
+
+      <section class="drawer-section profile-summary" aria-labelledby="profile-title">
+        <h3 id="profile-title">Estudante</h3>
+        <p id="profile-name" class="auth-user">Aguardando login.</p>
+        <p id="sync-status" class="sync-status" data-auth-status aria-live="polite">Supabase não configurado.</p>
+      </section>
+
+      <section class="drawer-section account-panel" aria-labelledby="account-title">
+        <h3 id="account-title">Conta</h3>
         <div id="auth-panel" class="auth-fields">
-          <label for="auth-email">E-mail</label>
-          <input id="auth-email" type="email" autocomplete="email" placeholder="email@exemplo.com">
+          <label for="auth-name">Nome</label>
+          <input id="auth-name" data-auth-name type="text" autocomplete="username" placeholder="Ex.: bia" maxlength="40">
           <label for="auth-password">Senha</label>
-          <input id="auth-password" type="password" autocomplete="current-password">
-          <div class="button-row">
+          <input id="auth-password" data-auth-password type="password" autocomplete="current-password" minlength="6" placeholder="Mínimo de 6 caracteres">
+          <div class="button-row auth-actions">
             <button id="auth-signin" type="button">Entrar</button>
-            <button id="auth-signup" type="button">Criar conta</button>
+            <button id="auth-signup" class="primary" type="button">Criar conta</button>
           </div>
         </div>
-        <div id="cloud-panel" class="auth-fields" hidden>
-          <p id="cloud-user" class="auth-user"></p>
+        <div id="cloud-panel" class="cloud-panel" hidden>
+          <p>Conta conectada: <strong id="cloud-user">usuário</strong></p>
           <div class="button-row">
-            <button id="cloud-sync" class="primary" type="button">Sincronizar agora</button>
+            <button id="cloud-sync" type="button">Sincronizar agora</button>
             <button id="auth-signout" type="button">Sair</button>
           </div>
         </div>
       </section>
+
+      <section class="drawer-section reading-panel" aria-labelledby="reading-title">
+        <h3 id="reading-title">Leitura</h3>
+        <p>Escolha uma apresentação confortável. O conteúdo e as estatísticas continuam os mesmos.</p>
+        <label>Tamanho do texto</label>
+        <div class="segmented" role="group" aria-label="Tamanho do texto">
+          <button type="button" data-action="set-font" data-font="small">Compacto</button>
+          <button type="button" data-action="set-font" data-font="normal">Normal</button>
+          <button type="button" data-action="set-font" data-font="large">Maior</button>
+        </div>
+        <label>Tema</label>
+        <div class="segmented" role="group" aria-label="Tema da página">
+          <button type="button" data-action="set-theme" data-theme="auto">Auto</button>
+          <button type="button" data-action="set-theme" data-theme="light">Claro</button>
+          <button type="button" data-action="set-theme" data-theme="dark">Escuro</button>
+        </div>
+        <div class="reading-preview" aria-hidden="true">
+          <strong>Prévia</strong>
+          <span>Equações ficam mais fáceis quando cada transformação preserva o equilíbrio.</span>
+        </div>
+      </section>
     </aside>
+
   <div id="live-region" class="sr-only" aria-live="polite"></div>
   <script id="page-data" type="application/json">{"type":"index","currentFile":"index.html","modules":[{"id":1,"guide":0,"key":"fundamentos","file":"01-fundamentos-aritmeticos.html","title":"Fundamentos aritméticos","shortTitle":"Fundamentos","level":"Base","description":"Revisão de conjuntos numéricos, reta numérica, valor absoluto, sinais, frações, decimais, porcentagens, potenciação e radiciação.","prerequisites":["Leitura de números inteiros","Tabuada básica","Operações com números naturais"],"objectives":["Revisar operações essenciais para que o cálculo não atrapalhe a álgebra","Reconhecer conjuntos numéricos e interpretar a reta numérica","Operar com inteiros, frações, decimais e porcentagens","Aplicar ordem das operações, potências e raízes"],"concepts":["Os conjuntos naturais, inteiros, racionais, irracionais e reais organizam os tipos de número usados na álgebra.","Na reta numérica, números maiores ficam à direita e números menores ficam à esquerda.","Valor absoluto representa distância até o zero e nunca é negativo.","Em sinais iguais, somam-se os valores absolutos e mantém-se o sinal; em sinais diferentes, subtraem-se os valores absolutos.","Frações com denominadores diferentes precisam de denominador comum para soma ou subtração.","Potenciação repete multiplicação; radiciação desfaz uma potência."],"formulas":["ℕ={0,1,2,3,...}","ℤ={...,-2,-1,0,1,2,...}","|x| é a distância de x até 0","a-b=a+(-b)","(a/b)+(c/d)=(ad+bc)/(bd)","√a=b quando b²=a"],"steps":["Identifique o tipo de número e o sinal envolvido.","Resolva parênteses, potências e raízes antes de multiplicações, divisões, somas e subtrações.","Em frações, simplifique quando possível e use denominador comum para somar ou subtrair.","Confira o resultado com uma operação inversa ou estimativa."],"commonErrors":["Somar números de sinais diferentes sem comparar os valores absolutos.","Ignorar a prioridade de parênteses, potências e multiplicações.","Somar denominadores em uma soma de frações.","Confundir raiz quadrada com metade do número."],"quickQuestions":["Calcule 7+(-12).","Calcule -5-(-8).","Calcule (-6)(-4).","Calcule 18÷(-3).","Resolva 3+4·2 respeitando a ordem.","Simplifique 18/24."],"keywords":["sinais","frações","potência","raiz","reta numérica","valor absoluto"]},{"id":2,"guide":1,"key":"expressoes","file":"02-expressoes-algebricas.html","title":"Expressões algébricas","shortTitle":"Expressões","level":"Base","description":"Introdução ao uso de letras na matemática, com variáveis, incógnitas, termos, coeficientes, parte literal, grau e valor numérico.","prerequisites":["Operações aritméticas","Leitura de potências simples"],"objectives":["Diferenciar variável, incógnita e expressão algébrica","Identificar termos, coeficientes e partes literais","Determinar o grau de termos e polinômios simples","Traduzir frases curtas para linguagem algébrica"],"concepts":["Álgebra usa letras e símbolos para representar números, padrões e relações.","Variável pode assumir diferentes valores; incógnita é um valor desconhecido que buscamos encontrar.","Uma expressão algébrica combina números, letras e operações, mas não precisa ter sinal de igualdade.","O sinal faz parte do termo: em 4x²-3x+7, os termos são 4x², -3x e 7.","Coeficiente é o número que multiplica a parte literal; quando aparece apenas x, o coeficiente é 1.","O grau de um termo é a soma dos expoentes da parte literal."],"formulas":["3x+5","em -5x²y, coeficiente -5 e parte literal x²y","grau de 4x²y³ = 5","monômio: 1 termo; binômio: 2; trinômio: 3","triplo de x diminuído em 4 → 3x-4"],"steps":["Separe a expressão em termos, sempre mantendo o sinal de cada termo.","Identifique o coeficiente e a parte literal de cada termo.","Some os expoentes da parte literal para encontrar o grau.","Substitua valores nas letras quando precisar calcular o valor numérico."],"commonErrors":["Dizer que x não tem coeficiente, quando o coeficiente é 1.","Ignorar o sinal negativo como parte do coeficiente.","Confundir expoente com coeficiente.","Traduzir frases sem definir claramente o que a letra representa."],"quickQuestions":["Quais são os termos de 5x²-2x+8?","Qual é o coeficiente de -7y?","Qual é a parte literal de 4a²b?","Qual é o grau de 3x²y⁴?","Calcule 2x+5 para x=3.","Traduza: o triplo de um número diminuído em 4."],"keywords":["variável","incógnita","coeficiente","parte literal","grau","valor numérico"]},{"id":3,"guide":2,"key":"termos","file":"03-termos-semelhantes.html","title":"Redução de termos semelhantes","shortTitle":"Termos semelhantes","level":"Base","description":"Redução de expressões por combinação de termos que possuem exatamente a mesma parte literal.","prerequisites":["Expressões algébricas","Coeficientes","Sinais positivos e negativos"],"objectives":["Reconhecer termos semelhantes pela parte literal","Somar e subtrair apenas os coeficientes de termos semelhantes","Preservar a parte literal durante a redução","Evitar combinações indevidas entre letras ou expoentes diferentes"],"concepts":["Termos semelhantes possuem exatamente as mesmas letras com os mesmos expoentes.","A redução muda apenas os coeficientes; a parte literal permanece igual.","Constantes são semelhantes entre si, mas não são semelhantes a termos com letras.","x e x² não são semelhantes, porque os expoentes são diferentes.","O sinal acompanha o termo durante o agrupamento.","Quando os coeficientes se anulam, o termo desaparece da expressão simplificada."],"formulas":["ax+bx=(a+b)x","4x+3x=7x","9y-2y=7y","5a-8a=-3a","3x+4y não vira 7xy"],"steps":["Identifique os termos.","Observe os sinais.","Agrupe partes literais iguais.","Some ou subtraia os coeficientes.","Preserve a parte literal.","Verifique se ainda há termos semelhantes."],"commonErrors":["Transformar 3x+4y em 7xy.","Reduzir 2x+3x² como se fossem semelhantes.","Perder o sinal negativo durante o agrupamento.","Somar coeficiente com expoente."],"quickQuestions":["Reduza 3x+8x.","Reduza 9a-12a.","Simplifique 4y+7-2y+5.","Simplifique 3x²+2x-5x²+9x.","Simplifique 2ab-7ab+3a.","Quanto vale x-x+5?"],"keywords":["termos semelhantes","redução","coeficientes","parte literal","simplificação"]},{"id":4,"guide":3,"key":"distributiva","file":"04-propriedade-distributiva.html","title":"Propriedade distributiva","shortTitle":"Distributiva","level":"Base","description":"Uso da propriedade distributiva para multiplicar um termo por todos os termos dos parênteses, com atenção especial aos sinais.","prerequisites":["Multiplicação","Regra de sinais","Termos semelhantes"],"objectives":["Aplicar a distributiva simples","Controlar sinais negativos antes e dentro dos parênteses","Combinar distributiva com redução de termos semelhantes","Desenvolver produtos entre binômios"],"concepts":["A distributiva espalha a multiplicação para todos os termos dentro dos parênteses.","O fator externo deve multiplicar cada termo interno, não apenas o primeiro.","Um sinal de menos antes dos parênteses troca o sinal de todos os termos internos.","Depois de distribuir, pode ser necessário reduzir termos semelhantes.","Na distributiva dupla, cada termo do primeiro parêntese multiplica cada termo do segundo.","A conferência por substituição ajuda a detectar erro de sinal."],"formulas":["a(b+c)=ab+ac","a(b-c)=ab-ac","-(x+3)=-x-3","-(x-4)=-x+4","(a+b)(c+d)=ac+ad+bc+bd"],"steps":["Identifique o fator fora dos parênteses.","Multiplique esse fator por cada termo interno.","Cuide do sinal em cada produto.","Reduza termos semelhantes quando aparecerem.","Confira se todos os termos foram multiplicados."],"commonErrors":["Multiplicar apenas o primeiro termo do parêntese.","Errar o sinal quando o fator externo é negativo.","Esquecer de reduzir termos semelhantes depois da distributiva dupla.","Trocar distributiva por soma de expoentes."],"quickQuestions":["Desenvolva 3(x+5).","Desenvolva -4(x-2).","Simplifique 2(3x+1)+x.","Simplifique 5(x-2)-3(x+4).","Desenvolva (x+1)(x+4).","Simplifique -(2x-7)."],"keywords":["distributiva","parênteses","sinais","binômio","produto"]},{"id":5,"guide":4,"key":"eq1","file":"05-equacoes-primeiro-grau.html","title":"Equações do primeiro grau","shortTitle":"Equações 1º grau","level":"Base","description":"Resolução de equações do primeiro grau pelo princípio da balança, com casos simples, parênteses, frações, decimais e tipos de solução.","prerequisites":["Distributiva","Termos semelhantes","Frações simples"],"objectives":["Entender equação como igualdade com incógnita","Usar operações equivalentes nos dois lados","Resolver equações com incógnita nos dois lados, parênteses e frações","Reconhecer uma solução, infinitas soluções ou nenhuma solução"],"concepts":["Uma equação é uma igualdade com uma incógnita.","Resolver é encontrar o valor que torna a igualdade verdadeira.","O princípio da balança permite realizar a mesma operação nos dois lados sem alterar a solução.","A forma geral de uma equação do primeiro grau é ax+b=0, com a≠0.","Parênteses e denominadores devem ser tratados antes de isolar a incógnita.","Resultados como 3=8 ou 2x+6=2x+6 indicam, respectivamente, nenhuma solução ou infinitas soluções."],"formulas":["ax+b=0, com a≠0","a=b → a+c=b+c","a=b → a-c=b-c","a=b → ac=bc","a=b e c≠0 → a/c=b/c"],"steps":["Elimine parênteses.","Elimine denominadores quando houver frações.","Reduza termos semelhantes.","Reúna termos com incógnita e termos constantes.","Isole a incógnita.","Verifique na equação original e escreva o conjunto solução."],"commonErrors":["Trocar sinais sem entender a operação feita.","Dividir apenas parte de uma expressão.","Perder sinais negativos ao distribuir ou reunir termos.","Não verificar a resposta na equação original.","Esquecer os casos de infinitas soluções e sem solução."],"quickQuestions":["Resolva x+8=21.","Resolva 4x=28.","Resolva 3x-5=16.","Resolva 7x+2=5x+18.","Resolva 2(x+4)=18.","Classifique 5x+1=5x-3."],"keywords":["equação linear","incógnita","balança","operações inversas","conjunto solução"]},{"id":6,"guide":5,"key":"problemas1","file":"06-problemas-primeiro-grau.html","title":"Problemas com equações do primeiro grau","shortTitle":"Problemas 1º grau","level":"Base","description":"Tradução de textos para equações, com problemas de idade, dinheiro, compras, perímetros e números consecutivos.","prerequisites":["Equações do primeiro grau","Leitura atenta de enunciados"],"objectives":["Identificar a incógnita em um problema","Traduzir frases para expressões algébricas","Montar e resolver equações","Responder com frase completa e unidade adequada"],"concepts":["Resolver problemas exige transformar linguagem cotidiana em linguagem matemática.","A escolha da incógnita deve representar exatamente o que foi perguntado.","A equação reúne as relações do enunciado.","A resposta final deve voltar ao contexto."],"formulas":["dobro de um número → 2x","metade de um número → x/2","consecutivos → x e x+1"],"steps":["Leia a pergunta final.","Defina a incógnita com clareza.","Traduza cada informação relevante.","Monte a equação, resolva e escreva uma frase-resposta."],"commonErrors":["Responder apenas o valor de x quando o problema pede outra grandeza.","Traduzir “a menos que” e “a mais que” no sentido errado.","Não conferir se a resposta faz sentido no contexto.","Misturar unidades diferentes."],"quickQuestions":["Como representar o dobro de um número?","Como representar dois números consecutivos?","Por que a resposta deve ter frase?","O que fazer antes de montar a equação?"],"keywords":["problema","tradução","idade","dinheiro","contexto"]},{"id":7,"guide":6,"key":"ineq1","file":"07-inequacoes-primeiro-grau.html","title":"Inequações do primeiro grau","shortTitle":"Inequações 1º grau","level":"Intermediário","description":"Desigualdades lineares, intervalos, reta numérica e a regra de inverter o sinal ao multiplicar ou dividir por número negativo.","prerequisites":["Equações do primeiro grau","Números negativos","Intervalos na reta"],"objectives":["Resolver desigualdades lineares","Representar soluções por intervalos","Usar círculos abertos e fechados na reta","Aplicar corretamente a inversão do sinal"],"concepts":["Inequações comparam expressões em vez de afirmar igualdade.","A solução geralmente é um intervalo de números.","Multiplicar ou dividir por número negativo inverte a desigualdade.","A reta numérica ajuda a visualizar o conjunto solução."],"formulas":["x>a → (a,+∞)","x≥a → [a,+∞)","se -ax>b, dividir por negativo inverte o sinal"],"steps":["Isole a incógnita como em uma equação.","Ao dividir por número negativo, inverta o símbolo.","Escreva a solução como desigualdade e como intervalo.","Confira um valor dentro e um valor fora do intervalo."],"commonErrors":["Não inverter o sinal ao dividir por número negativo.","Usar bolinha fechada em > ou <.","Confundir intervalo aberto e fechado.","Testar apenas o ponto limite."],"quickQuestions":["Quando o sinal da desigualdade muda?","x>3 inclui o 3?","Como representar x≤5 em intervalo?","Qual símbolo indica maior ou igual?"],"keywords":["desigualdade","intervalo","reta numérica","maior","menor"]},{"id":8,"guide":7,"key":"sistemas1","file":"08-sistemas-primeiro-grau.html","title":"Sistemas de equações do primeiro grau","shortTitle":"Sistemas 1º grau","level":"Intermediário","description":"Resolução de sistemas 2×2 e introdução a 3×3 por substituição, eliminação, comparação e interpretação gráfica.","prerequisites":["Equações do primeiro grau","Redução de termos semelhantes"],"objectives":["Resolver sistemas por substituição","Resolver sistemas por eliminação","Classificar sistemas","Interpretar solução como interseção de retas"],"concepts":["Um sistema reúne equações que devem ser verdadeiras ao mesmo tempo.","Em 2×2, procuramos um par ordenado.","A eliminação remove temporariamente uma incógnita.","Graficamente, a solução é o ponto em que as retas se cruzam."],"formulas":["x+y=s","ax+by=c","SPD: uma solução; SPI: infinitas; SI: nenhuma"],"steps":["Escolha um método adequado.","Isole ou elimine uma incógnita.","Resolva a equação resultante.","Substitua para encontrar a outra incógnita e verifique as duas equações."],"commonErrors":["Encontrar x e esquecer y.","Substituir em apenas uma equação sem verificar a outra.","Somar equações sem alinhar termos semelhantes.","Confundir sistema impossível com sistema indeterminado."],"quickQuestions":["O que significa solução de um sistema?","Quando usar eliminação?","Como verificar um par ordenado?","O que ocorre com retas paralelas?"],"keywords":["sistema","substituição","eliminação","par ordenado","retas"]},{"id":9,"guide":8,"key":"funcao1","file":"09-funcao-primeiro-grau.html","title":"Função do primeiro grau","shortTitle":"Função 1º grau","level":"Intermediário","description":"Estudo de f(x)=ax+b, coeficiente angular, coeficiente linear, raiz, tabela de valores e gráficos de retas.","prerequisites":["Equações do primeiro grau","Plano cartesiano básico"],"objectives":["Identificar coeficientes de f(x)=ax+b","Calcular imagens e raízes","Classificar crescimento","Ler e construir tabelas para gráficos"],"concepts":["Uma função do primeiro grau associa cada x a um y por uma regra linear.","O coeficiente angular controla inclinação e crescimento.","O coeficiente linear indica o corte no eixo y.","A raiz é o x para o qual f(x)=0."],"formulas":["f(x)=ax+b","a>0 crescente","a<0 decrescente","raiz: x=-b/a"],"steps":["Leia a e b na fórmula.","Para imagem, substitua x.","Para raiz, faça f(x)=0.","Use dois pontos para desenhar a reta."],"commonErrors":["Trocar coeficiente angular e linear.","Achar que b é a raiz da função.","Usar apenas um ponto para definir uma reta.","Ignorar o sinal de a ao classificar crescimento."],"quickQuestions":["Em f(x)=2x+1, qual é a?","Quando a função é decrescente?","O que é raiz da função?","Qual ponto indica o coeficiente linear?"],"keywords":["função","reta","coeficiente angular","coeficiente linear","raiz"]},{"id":10,"guide":9,"key":"produtos","file":"10-produtos-notaveis.html","title":"Produtos notáveis","shortTitle":"Produtos notáveis","level":"Intermediário","description":"Padrões algébricos úteis: quadrado da soma, quadrado da diferença e produto da soma pela diferença.","prerequisites":["Distributiva","Potenciação","Termos semelhantes"],"objectives":["Reconhecer padrões frequentes","Desenvolver binômios ao quadrado","Aplicar soma pela diferença","Identificar erros de desenvolvimento"],"concepts":["Produtos notáveis são atalhos seguros para produtos algébricos comuns.","Eles vêm da distributiva e não devem ser memorizados sem sentido.","O termo central no quadrado da soma ou diferença é 2ab.","Soma pela diferença elimina o termo central."],"formulas":["(a+b)²=a²+2ab+b²","(a-b)²=a²-2ab+b²","(a+b)(a-b)=a²-b²"],"steps":["Identifique qual padrão aparece.","Determine quem faz o papel de a e b.","Aplique a fórmula completa.","Confira expandindo por distributiva se houver dúvida."],"commonErrors":["Escrever (a+b)²=a²+b².","Errar o sinal do termo central em (a-b)².","Aplicar soma pela diferença quando os sinais não são opostos.","Esquecer de elevar o número ao quadrado."],"quickQuestions":["Qual é o termo central de (x+3)²?","Quanto é (x+5)(x-5)?","Por que (x+4)² não é x²+16?","Qual fórmula usa diferença de quadrados?"],"keywords":["quadrado da soma","quadrado da diferença","soma pela diferença","binômio"]},{"id":11,"guide":10,"key":"fatoracao","file":"11-fatoracao.html","title":"Fatoração","shortTitle":"Fatoração","level":"Intermediário","description":"Transformação de somas e diferenças em produtos por fator comum, agrupamento, diferença de quadrados e trinômios.","prerequisites":["Produtos notáveis","Distributiva","Divisibilidade"],"objectives":["Colocar fator comum em evidência","Fatorar por agrupamento","Reconhecer diferença de quadrados","Fatorar trinômios simples"],"concepts":["Fatorar é escrever uma expressão como produto.","A fatoração desfaz uma distributiva.","Fator comum é aquilo que aparece em todos os termos.","Alguns produtos notáveis aparecem ao contrário na fatoração."],"formulas":["ab+ac=a(b+c)","a²-b²=(a+b)(a-b)","x²+(p+q)x+pq=(x+p)(x+q)"],"steps":["Procure fator comum antes de outros métodos.","Verifique se há diferença de quadrados.","Em trinômios, busque dois números com soma e produto adequados.","Multiplique o resultado para conferir."],"commonErrors":["Esquecer um fator comum negativo.","Fatorar soma de quadrados como diferença.","Escolher números com produto certo e soma errada.","Parar antes de fatorar completamente."],"quickQuestions":["Qual é o fator comum de 6x+12?","Como fatorar x²-16?","Que produto volta de (x+2)(x+3)?","Por que conferir por distributiva ajuda?"],"keywords":["fator comum","agrupamento","diferença de quadrados","trinômio"]},{"id":12,"guide":11,"key":"eq2","file":"12-equacoes-segundo-grau.html","title":"Equações do segundo grau","shortTitle":"Equações 2º grau","level":"Intermediário","description":"Resolução de equações quadráticas completas e incompletas por fatoração, Bhaskara e relações entre raízes.","prerequisites":["Fatoração","Produtos notáveis","Radiciação"],"objectives":["Reconhecer ax²+bx+c=0","Resolver equações incompletas","Aplicar discriminante e Bhaskara","Interpretar número de raízes reais"],"concepts":["Equações do segundo grau têm incógnita elevada ao quadrado.","O discriminante indica quantas raízes reais existem.","Fatoração pode resolver rapidamente muitos casos.","Toda raiz deve zerar a equação original."],"formulas":["ax²+bx+c=0, a≠0","Δ=b²-4ac","x=(-b±√Δ)/(2a)","x₁+x₂=-b/a e x₁x₂=c/a"],"steps":["Organize a equação na forma geral.","Identifique a, b e c.","Escolha fatoração ou Bhaskara.","Calcule as raízes e verifique."],"commonErrors":["Trocar sinais ao identificar b.","Esquecer o 2a no denominador.","Calcular Δ com sinal errado.","Aceitar raízes que não zeram a equação."],"quickQuestions":["Qual é a forma geral?","O que Δ<0 indica?","Quais são a, b e c em x²-5x+6=0?","Quando uma equação é incompleta?"],"keywords":["Bhaskara","discriminante","raízes","quadrática","fatoração"]},{"id":13,"guide":12,"key":"funcao2","file":"13-funcao-segundo-grau.html","title":"Função do segundo grau","shortTitle":"Função 2º grau","level":"Intermediário","description":"Parábolas, concavidade, raízes, vértice, eixo de simetria, máximo, mínimo e estudo do sinal.","prerequisites":["Equações do segundo grau","Plano cartesiano","Função do primeiro grau"],"objectives":["Identificar concavidade","Calcular raízes e vértice","Interpretar máximo e mínimo","Relacionar gráfico e sinal da função"],"concepts":["A função quadrática gera uma parábola.","O sinal de a define a concavidade.","As raízes são interseções com o eixo x.","O vértice é o ponto de máximo ou mínimo da parábola."],"formulas":["f(x)=ax²+bx+c","xᵥ=-b/(2a)","yᵥ=-Δ/(4a)","a>0 abre para cima"],"steps":["Leia a, b e c.","Use Δ para encontrar raízes quando existirem.","Calcule o vértice.","Use concavidade e raízes para estudar sinal."],"commonErrors":["Dizer que toda parábola tem duas raízes reais.","Trocar máximo e mínimo.","Calcular xv sem considerar o sinal de b.","Confundir yv com raiz."],"quickQuestions":["Quando a parábola abre para cima?","Qual fórmula dá xv?","O que são raízes no gráfico?","Quando há ponto máximo?"],"keywords":["parábola","vértice","concavidade","máximo","mínimo"]},{"id":14,"guide":13,"key":"ineq2","file":"14-inequacoes-segundo-grau.html","title":"Inequações do segundo grau","shortTitle":"Inequações 2º grau","level":"Avançado","description":"Desigualdades quadráticas, análise do sinal da parábola, intervalos, produtos e quocientes.","prerequisites":["Função do segundo grau","Inequações do primeiro grau","Fatoração"],"objectives":["Transformar a inequação para comparar com zero","Encontrar raízes","Analisar sinal por intervalos","Resolver inequações produto e quociente"],"concepts":["A solução depende dos intervalos onde a expressão é positiva, zero ou negativa.","As raízes dividem a reta em regiões de sinal.","A concavidade indica o sinal fora e dentro das raízes.","Em quocientes, valores que zeram denominador são excluídos."],"formulas":["(x-r₁)(x-r₂)>0","a>0: positivo fora das raízes","a<0: positivo entre as raízes"],"steps":["Leve todos os termos para um lado.","Fatore ou encontre as raízes.","Monte o quadro de sinais.","Escolha os intervalos compatíveis com o símbolo."],"commonErrors":["Incluir raiz quando o símbolo é > ou <.","Esquecer restrição em denominadores.","Escolher intervalo sem analisar a concavidade.","Confundir sinal da expressão com sinal de x."],"quickQuestions":["Para x²-5x+6>0, onde a expressão é positiva?","Quando a raiz entra na solução?","O que muda em ≤?","Por que denominador zero é proibido?"],"keywords":["quadro de sinais","intervalos","produto","quociente","parábola"]},{"id":15,"guide":14,"key":"fracionarias","file":"15-equacoes-fracionarias.html","title":"Equações fracionárias","shortTitle":"Fracionárias","level":"Avançado","description":"Equações com incógnita no denominador, restrições de domínio, MMC algébrico e verificação de soluções.","prerequisites":["Equações do primeiro grau","Fatoração","Frações algébricas"],"objectives":["Determinar restrições","Eliminar denominadores com segurança","Resolver a equação resultante","Descartar soluções inválidas"],"concepts":["A incógnita no denominador exige restrições antes da resolução.","Multiplicar pelo MMC algébrico elimina denominadores.","A equação transformada pode gerar valores proibidos.","Toda solução deve ser testada nas restrições e na equação original."],"formulas":["x-a≠0 → x≠a","2/(x-1)=3 → 2=3(x-1)"],"steps":["Anote quais denominadores não podem ser zero.","Encontre o MMC algébrico.","Multiplique todos os termos por esse MMC.","Resolva e descarte valores proibidos."],"commonErrors":["Começar a resolver sem restrições.","Multiplicar apenas parte da equação pelo MMC.","Aceitar solução que zera denominador.","Cancelar termos em soma indevidamente."],"quickQuestions":["Por que x=1 é proibido em 2/(x-1)?","Para que serve o MMC algébrico?","Quando uma solução é inválida?","O que verificar no final?"],"keywords":["denominador","restrição","MMC","fração algébrica","domínio"]},{"id":16,"guide":15,"key":"irracionais","file":"16-equacoes-irracionais.html","title":"Equações irracionais","shortTitle":"Irracionais","level":"Avançado","description":"Equações com incógnitas dentro de raízes, condições de existência, isolamento da raiz e verificação.","prerequisites":["Radiciação","Equações do segundo grau","Domínio de expressões"],"objectives":["Definir condições de existência","Isolar radicais","Elevar ambos os lados à potência adequada","Detectar soluções falsas"],"concepts":["Radicais pares exigem radicando não negativo.","Elevar ao quadrado pode introduzir soluções estranhas.","Isolar a raiz antes de elevar reduz erros.","A verificação na equação original é indispensável."],"formulas":["√(x+a)=b → x+a=b², com b≥0","radicando≥0"],"steps":["Escreva as condições de existência.","Isole uma raiz por vez.","Eleve os dois lados com cuidado.","Resolva e teste todos os candidatos."],"commonErrors":["Elevar termo por termo de uma soma sem fórmula correta.","Ignorar que raiz quadrada principal é não negativa.","Não testar candidatos.","Perder condições de existência."],"quickQuestions":["Qual condição existe em √(x+3)?","Por que podem surgir soluções falsas?","Quando posso elevar ao quadrado?","Por que verificar é obrigatório?"],"keywords":["raiz","radicando","condição de existência","solução falsa"]},{"id":17,"guide":16,"key":"modulo","file":"17-modulo.html","title":"Equações e inequações modulares","shortTitle":"Módulo","level":"Avançado","description":"Módulo como distância, equações com valor absoluto, inequações modulares e representação na reta.","prerequisites":["Inequações","Números negativos","Interpretação de distância"],"objectives":["Interpretar |x| como distância","Resolver equações modulares por casos","Resolver inequações do tipo |x-a|<b e |x-a|>b","Representar soluções na reta"],"concepts":["O módulo mede distância e nunca é negativo.","|x-a| indica distância de x até a.","Equações modulares se dividem em dois casos quando o resultado é positivo.","Inequações com < dão intervalo central; com > dão regiões externas."],"formulas":["|x-a|=b → x=a±b","|x-a|<b → a-b<x<a+b","|x-a|>b → x<a-b ou x>a+b"],"steps":["Interprete o centro e a distância.","Para igualdade, escreva os dois casos.","Para inequação menor, monte o intervalo entre os extremos.","Para inequação maior, use os lados externos."],"commonErrors":["Dizer que |x| pode ser negativo.","Resolver |x-a|=b com apenas uma resposta.","Trocar intervalo interno e externo.","Ignorar que |x-a|=0 tem uma solução só."],"quickQuestions":["Quanto é |-7|?","Quais soluções de |x-3|=5?","O que significa |x|<4?","Módulo representa que ideia geométrica?"],"keywords":["módulo","valor absoluto","distância","casos","intervalo"]},{"id":18,"guide":17,"key":"exponenciais","file":"18-equacoes-exponenciais.html","title":"Potenciação e equações exponenciais","shortTitle":"Exponenciais","level":"Avançado","description":"Propriedades das potências, igualação de bases, substituições e problemas de crescimento ou decaimento.","prerequisites":["Potenciação","Equações do primeiro e segundo grau"],"objectives":["Aplicar propriedades de potências","Igualar bases quando possível","Usar substituição em expressões exponenciais","Interpretar crescimento e decaimento"],"concepts":["Em equações exponenciais, a incógnita aparece no expoente.","Bases iguais permitem comparar expoentes.","Algumas equações exigem reescrever números como potências da mesma base.","Substituições transformam certas exponenciais em equações conhecidas."],"formulas":["aᵐ·aⁿ=a⁽ᵐ⁺ⁿ⁾","aᵐ/aⁿ=a⁽ᵐ⁻ⁿ⁾","(aᵐ)ⁿ=a⁽ᵐⁿ⁾","a⁰=1"],"steps":["Tente escrever tudo com a mesma base.","Use as propriedades para simplificar expoentes.","Iguale os expoentes quando as bases forem iguais.","Se necessário, substitua a potência repetida por uma variável auxiliar."],"commonErrors":["Somar bases em vez de expoentes.","Aplicar propriedades de mesma base em bases diferentes.","Esquecer restrições de base positiva em modelos reais.","Não voltar da substituição para x."],"quickQuestions":["Quanto é 2⁽ˣ⁺¹⁾=16?","Quando posso igualar expoentes?","O que vale a⁰?","Como reescrever 81 como potência de 3?"],"keywords":["expoente","base","igualação de bases","crescimento","decaimento"]},{"id":19,"guide":18,"key":"logaritmos","file":"19-logaritmos.html","title":"Logaritmos e equações logarítmicas","shortTitle":"Logaritmos","level":"Avançado","description":"Definição de logaritmo como expoente, condições de existência, propriedades e equações logarítmicas.","prerequisites":["Potenciação","Equações exponenciais","Domínio de expressões"],"objectives":["Converter entre forma logarítmica e exponencial","Aplicar condições de existência","Usar propriedades de logaritmos","Resolver equações logarítmicas simples"],"concepts":["Logaritmo responde qual expoente transforma a base no número.","A base deve ser positiva e diferente de 1.","O logaritmando deve ser positivo.","As propriedades transformam produtos, quocientes e potências."],"formulas":["logₐ(b)=x ⇔ aˣ=b","a>0, a≠1, b>0","logₐ(MN)=logₐ(M)+logₐ(N)","logₐ(Mᵏ)=k logₐ(M)"],"steps":["Anote as condições de existência.","Converta para forma exponencial quando for simples.","Use propriedades apenas dentro do domínio.","Resolva e verifique o logaritmando."],"commonErrors":["Permitir logaritmando negativo.","Usar base 1.","Distribuir logaritmo em soma como se fosse produto.","Esquecer de testar domínio após resolver."],"quickQuestions":["log₂(32) vale quanto?","Por que log₂(x-1) exige x>1?","Qual é a forma exponencial de logₐ(b)=x?","Qual propriedade envolve produto?"],"keywords":["logaritmo","base","logaritmando","domínio","propriedades"]},{"id":20,"guide":19,"key":"sistemasav","file":"20-sistemas-avancados.html","title":"Sistemas avançados","shortTitle":"Sistemas avançados","level":"Avançado","description":"Sistemas 3×3, não lineares, quadráticos, exponenciais, logarítmicos e modulares com análise de casos.","prerequisites":["Sistemas lineares","Equações quadráticas","Exponenciais","Logaritmos","Módulo"],"objectives":["Escolher método de resolução conforme o tipo de sistema","Resolver sistemas não lineares simples","Usar substituição e eliminação em 3×3","Controlar domínio e casos especiais"],"concepts":["Sistemas avançados combinam técnicas de vários módulos.","A estrutura do sistema indica o método mais econômico.","Equações não lineares podem gerar mais de uma solução.","Domínio, restrições e casos devem ser acompanhados durante toda a solução."],"formulas":["x+y=s e xy=p","substituição: y=f(x)","sistemas 3×3 podem ser escalonados"],"steps":["Classifique o tipo de sistema.","Procure uma incógnita fácil de isolar.","Substitua para reduzir o número de incógnitas.","Verifique todas as soluções nas equações originais."],"commonErrors":["Aplicar método linear em sistema não linear sem adaptação.","Perder soluções ao dividir por expressão que pode ser zero.","Ignorar domínio de logaritmos ou denominadores.","Não testar pares ou triplas finais."],"quickQuestions":["Quando um sistema é não linear?","Por que verificar pares finais é importante?","Que método ajuda em x+y e xy?","O que muda em sistema modular?"],"keywords":["3x3","não linear","quadrático","exponencial","casos"]}],"navigation":[{"file":"index.html","title":"Início","number":"00"},{"file":"01-fundamentos-aritmeticos.html","title":"Fundamentos aritméticos","number":"01"},{"file":"02-expressoes-algebricas.html","title":"Expressões algébricas","number":"02"},{"file":"03-termos-semelhantes.html","title":"Redução de termos semelhantes","number":"03"},{"file":"04-propriedade-distributiva.html","title":"Propriedade distributiva","number":"04"},{"file":"05-equacoes-primeiro-grau.html","title":"Equações do primeiro grau","number":"05"},{"file":"06-problemas-primeiro-grau.html","title":"Problemas com equações do primeiro grau","number":"06"},{"file":"07-inequacoes-primeiro-grau.html","title":"Inequações do primeiro grau","number":"07"},{"file":"08-sistemas-primeiro-grau.html","title":"Sistemas de equações do primeiro grau","number":"08"},{"file":"09-funcao-primeiro-grau.html","title":"Função do primeiro grau","number":"09"},{"file":"10-produtos-notaveis.html","title":"Produtos notáveis","number":"10"},{"file":"11-fatoracao.html","title":"Fatoração","number":"11"},{"file":"12-equacoes-segundo-grau.html","title":"Equações do segundo grau","number":"12"},{"file":"13-funcao-segundo-grau.html","title":"Função do segundo grau","number":"13"},{"file":"14-inequacoes-segundo-grau.html","title":"Inequações do segundo grau","number":"14"},{"file":"15-equacoes-fracionarias.html","title":"Equações fracionárias","number":"15"},{"file":"16-equacoes-irracionais.html","title":"Equações irracionais","number":"16"},{"file":"17-modulo.html","title":"Equações e inequações modulares","number":"17"},{"file":"18-equacoes-exponenciais.html","title":"Potenciação e equações exponenciais","number":"18"},{"file":"19-logaritmos.html","title":"Logaritmos e equações logarítmicas","number":"19"},{"file":"20-sistemas-avancados.html","title":"Sistemas avançados","number":"20"},{"file":"21-revisao-geral.html","title":"Revisão geral","number":"21"},{"file":"22-simulados.html","title":"Simulados","number":"22"}]}</script>
   <script src="vendor/supabase-js.js"></script>
@@ -916,8 +1315,230 @@
     return escapeHtml(formatMathNotation(value));
   }
 
+  const THEORY_DETAILS = {
+    fundamentos: {
+      intuition: 'Antes de resolver equações, a pessoa precisa confiar nas operações. Este módulo reforça sinal, fração, potência, raiz e reta numérica para que a álgebra não pare em uma conta básica.',
+      definition: 'Fundamentos aritméticos são as regras de cálculo usadas para transformar expressões sem mudar seu valor.',
+      vocabulary: ['Número natural: número usado para contar.', 'Número inteiro: inclui negativos, zero e positivos.', 'Número racional: pode ser escrito como fração.', 'Valor absoluto: distância de um número até o zero.'],
+      habit: 'Ao errar uma conta, volte para a operação inversa. Ela mostra rapidamente se o resultado faz sentido.',
+      visual: 'line',
+      flow: ['Identifique o sinal', 'Aplique a prioridade das operações', 'Simplifique o resultado', 'Confira por estimativa']
+    },
+    expressoes: {
+      intuition: 'Uma expressão algébrica é uma frase matemática. Ela não pede uma resposta única; ela descreve um cálculo que pode mudar conforme o valor das letras.',
+      definition: 'Expressão algébrica combina números, letras e operações. Quando substituímos a letra por um número, encontramos o valor numérico.',
+      vocabulary: ['Variável: letra que pode assumir valores diferentes.', 'Coeficiente: número que multiplica a variável.', 'Termo: parte separada por sinais de + ou −.', 'Valor numérico: resultado depois da substituição.'],
+      habit: 'Substitua usando parênteses, principalmente quando o valor for negativo.',
+      visual: 'flow',
+      flow: ['Leia a expressão', 'Substitua as letras', 'Respeite a ordem das operações', 'Simplifique']
+    },
+    termos: {
+      intuition: 'Reduzir termos semelhantes é juntar objetos do mesmo tipo. Podemos somar 3x com 5x, mas não faz sentido somar diretamente 3x com 5y.',
+      definition: 'Termos semelhantes têm a mesma parte literal, com as mesmas letras e os mesmos expoentes.',
+      vocabulary: ['Parte literal: letras do termo.', 'Coeficiente: número que acompanha a parte literal.', 'Redução: soma ou subtração dos coeficientes semelhantes.'],
+      habit: 'Marque visualmente os termos de mesmo tipo antes de calcular.',
+      visual: 'flow',
+      flow: ['Separe os termos', 'Agrupe os semelhantes', 'Some os coeficientes', 'Mantenha a parte literal']
+    },
+    distributiva: {
+      intuition: 'A distributiva transforma uma multiplicação por parênteses em uma soma de multiplicações. Ela é uma ponte entre forma fatorada e forma desenvolvida.',
+      definition: 'Multiplicar um fator por uma soma significa multiplicar esse fator por cada termo dentro dos parênteses.',
+      vocabulary: ['Fator externo: termo fora dos parênteses.', 'Distribuir: multiplicar o fator externo por todos os termos internos.', 'Desenvolver: remover parênteses aplicando operações válidas.'],
+      habit: 'Quando houver sinal de menos antes dos parênteses, distribua também o −1.',
+      visual: 'flow',
+      flow: ['Observe o fator externo', 'Multiplique pelo 1º termo', 'Multiplique pelo 2º termo', 'Reduza termos semelhantes']
+    },
+    eq1: {
+      intuition: 'Uma equação é como uma balança. Cada transformação precisa ser feita dos dois lados para preservar o equilíbrio.',
+      definition: 'Equação do primeiro grau é uma igualdade com incógnita na primeira potência, geralmente escrita na forma ax+b=0, com a≠0.',
+      vocabulary: ['Incógnita: valor desconhecido.', 'Membro: cada lado da igualdade.', 'Solução ou raiz: valor que torna a igualdade verdadeira.'],
+      habit: 'Prefira dizer “faço a mesma operação nos dois lados” em vez de apenas “passa para o outro lado”.',
+      visual: 'flow',
+      flow: ['Organize os termos', 'Isole a incógnita', 'Divida pelo coeficiente', 'Substitua para verificar']
+    },
+    problemas1: {
+      intuition: 'Problemas verbais pedem tradução. Primeiro entendemos a situação, depois escolhemos a incógnita e montamos a equação.',
+      definition: 'Modelar um problema é transformar informações do texto em relações matemáticas.',
+      vocabulary: ['Modelo: equação que representa o problema.', 'Incógnita: quantidade procurada.', 'Verificação contextual: conferir se a resposta cabe na história.'],
+      habit: 'Escreva o significado da incógnita antes da equação. Isso evita respostas sem unidade ou fora do contexto.',
+      visual: 'flow',
+      flow: ['Leia com calma', 'Defina a incógnita', 'Monte a equação', 'Resolva e interprete']
+    },
+    ineq1: {
+      intuition: 'Inequações descrevem faixas de valores. A resposta costuma ser um intervalo, não apenas um número.',
+      definition: 'Inequação do primeiro grau usa sinais como <, >, ≤ ou ≥ para comparar expressões com incógnita.',
+      vocabulary: ['Intervalo: conjunto contínuo de soluções.', 'Extremo aberto: valor que não entra.', 'Extremo fechado: valor que entra.', 'Sentido do sinal: direção da comparação.'],
+      habit: 'Ao multiplicar ou dividir por número negativo, inverta o sinal da desigualdade.',
+      visual: 'line',
+      flow: ['Resolva como equação', 'Atenção ao sinal negativo', 'Escreva o intervalo', 'Teste um valor']
+    },
+    sistemas1: {
+      intuition: 'Um sistema junta duas condições ao mesmo tempo. A solução precisa satisfazer todas as equações, não apenas uma delas.',
+      definition: 'Sistema linear de duas incógnitas é um conjunto de equações do primeiro grau com as mesmas variáveis.',
+      vocabulary: ['Par ordenado: resposta no formato (x,y).', 'Substituição: isolar uma variável e inserir na outra equação.', 'Eliminação: combinar equações para cancelar uma variável.'],
+      habit: 'Depois de achar x e y, substitua nas duas equações. Uma só conferência não basta.',
+      visual: 'flow',
+      flow: ['Escolha substituição ou eliminação', 'Encontre uma variável', 'Encontre a outra', 'Verifique nas duas equações']
+    },
+    funcao1: {
+      intuition: 'Função é uma regra de transformação: entra um valor de x e sai um valor de y.',
+      definition: 'Função afim tem forma f(x)=ax+b. O coeficiente a controla a inclinação e b indica onde a reta corta o eixo y.',
+      vocabulary: ['Domínio: valores de entrada.', 'Imagem: valores de saída.', 'Coeficiente angular: inclinação da reta.', 'Coeficiente linear: valor de y quando x=0.'],
+      habit: 'Para desenhar a reta, calcule dois pontos com cuidado e confira se o crescimento combina com o sinal de a.',
+      visual: 'flow',
+      flow: ['Identifique a e b', 'Monte uma tabela', 'Marque dois pontos', 'Trace a reta']
+    },
+    produtos: {
+      intuition: 'Produtos notáveis são atalhos seguros para multiplicações que aparecem muitas vezes.',
+      definition: 'São identidades algébricas que permitem desenvolver quadrados e diferenças de forma mais rápida.',
+      vocabulary: ['Quadrado da soma: (a+b)².', 'Quadrado da diferença: (a−b)².', 'Diferença de quadrados: a²−b².'],
+      habit: 'No quadrado da soma ou da diferença, o termo do meio é 2ab. Ele não pode desaparecer.',
+      visual: 'flow',
+      flow: ['Reconheça o padrão', 'Identifique a e b', 'Aplique a identidade', 'Reduza se necessário']
+    },
+    fatoracao: {
+      intuition: 'Fatorar é desmontar uma expressão em multiplicações. Isso revela estrutura e costuma simplificar equações.',
+      definition: 'Fatoração reescreve uma soma algébrica como produto de fatores equivalentes.',
+      vocabulary: ['Fator comum: parte presente em todos os termos.', 'Agrupamento: formar pares com fator comum.', 'Trinômio: expressão com três termos.'],
+      habit: 'Sempre procure fator comum antes de tentar fórmulas mais elaboradas.',
+      visual: 'flow',
+      flow: ['Procure fator comum', 'Cheque produto notável', 'Teste agrupamento', 'Confirme multiplicando']
+    },
+    eq2: {
+      intuition: 'Equações do segundo grau podem ter duas, uma ou nenhuma raiz real. O discriminante mostra esse cenário antes da resposta final.',
+      definition: 'Equação do segundo grau tem forma ax²+bx+c=0, com a≠0.',
+      vocabulary: ['Coeficientes a, b e c: números da forma geral.', 'Discriminante Δ: valor b²−4ac.', 'Raízes: valores que zeram a expressão.'],
+      habit: 'Organize tudo igual a zero antes de identificar a, b e c.',
+      visual: 'flow',
+      flow: ['Coloque na forma geral', 'Calcule Δ', 'Use fatoração ou fórmula', 'Verifique as raízes']
+    },
+    funcao2: {
+      intuition: 'A função quadrática desenha uma parábola. O sinal de a define a abertura e o vértice marca o ponto de virada.',
+      definition: 'Função quadrática tem forma f(x)=ax²+bx+c, com a≠0.',
+      vocabulary: ['Parábola: gráfico da função quadrática.', 'Vértice: ponto máximo ou mínimo.', 'Zeros: pontos em que f(x)=0.', 'Eixo de simetria: reta que divide a parábola em duas partes iguais.'],
+      habit: 'Analise sinal de a, zeros e vértice antes de desenhar ou interpretar o gráfico.',
+      visual: 'flow',
+      flow: ['Identifique a, b e c', 'Ache zeros quando existirem', 'Calcule o vértice', 'Interprete o gráfico']
+    },
+    ineq2: {
+      intuition: 'Inequações do segundo grau perguntam onde a parábola fica acima ou abaixo do eixo x.',
+      definition: 'Resolver uma inequação quadrática é encontrar os intervalos em que ax²+bx+c tem o sinal pedido.',
+      vocabulary: ['Intervalo de sinal: região onde a expressão é positiva ou negativa.', 'Raízes críticas: pontos onde o sinal pode mudar.', 'Tabela de sinais: organização dos intervalos.'],
+      habit: 'Comece pelas raízes e só depois escolha os intervalos pelo sinal da parábola.',
+      visual: 'line',
+      flow: ['Encontre as raízes', 'Divida a reta em intervalos', 'Analise o sinal', 'Escreva a solução']
+    },
+    fracionarias: {
+      intuition: 'Equações fracionárias exigem atenção ao denominador: nenhum denominador pode ser zero.',
+      definition: 'Equação fracionária contém incógnita em denominadores ou frações algébricas.',
+      vocabulary: ['Restrição: valor proibido para a incógnita.', 'MMC algébrico: múltiplo comum dos denominadores.', 'Solução extranha: valor que aparece no cálculo, mas não vale na equação original.'],
+      habit: 'Escreva as restrições antes de multiplicar pelos denominadores.',
+      visual: 'flow',
+      flow: ['Liste restrições', 'Elimine denominadores', 'Resolva a equação', 'Teste na original']
+    },
+    irracionais: {
+      intuition: 'Equações irracionais têm raiz com incógnita. Elevar ao quadrado pode ajudar, mas também pode criar solução falsa.',
+      definition: 'Equação irracional apresenta a incógnita dentro de uma raiz.',
+      vocabulary: ['Radicando: expressão dentro da raiz.', 'Domínio: valores que deixam a raiz possível.', 'Solução extranha: resultado gerado pela potenciação, mas inválido na equação original.'],
+      habit: 'Toda resposta precisa ser substituída na equação original.',
+      visual: 'flow',
+      flow: ['Defina o domínio', 'Isole a raiz', 'Eleve ao quadrado', 'Verifique cada solução']
+    },
+    modulo: {
+      intuition: 'Módulo mede distância. Por isso, |x|=3 significa que x está a 3 unidades do zero: pode ser 3 ou −3.',
+      definition: 'Valor absoluto representa distância na reta numérica e nunca é negativo.',
+      vocabulary: ['Distância: medida sem sinal.', 'Caso positivo: expressão dentro do módulo é ≥0.', 'Caso negativo: expressão dentro do módulo é <0.'],
+      habit: 'Separe os casos e confira se cada solução respeita a condição do caso.',
+      visual: 'line',
+      flow: ['Interprete como distância', 'Separe casos', 'Resolva cada caso', 'Confira as condições']
+    },
+    exponenciais: {
+      intuition: 'Equações exponenciais têm a incógnita no expoente. O objetivo é comparar potências compatíveis.',
+      definition: 'Equação exponencial envolve variável no expoente de uma potência.',
+      vocabulary: ['Base: número que está sendo elevado.', 'Expoente: indica repetição multiplicativa.', 'Mesma base: condição que permite igualar expoentes.'],
+      habit: 'Tente escrever os dois lados com a mesma base antes de aplicar logaritmos.',
+      visual: 'flow',
+      flow: ['Reescreva as bases', 'Use propriedades de potência', 'Iguale expoentes quando possível', 'Verifique']
+    },
+    logaritmos: {
+      intuition: 'Logaritmo responde a uma pergunta: qual expoente transforma a base naquele número?',
+      definition: 'logₐ(b)=x significa aˣ=b, com a>0, a≠1 e b>0.',
+      vocabulary: ['Base: número que será elevado.', 'Logaritmando: número dentro do logaritmo.', 'Domínio: logaritmando precisa ser positivo.'],
+      habit: 'Antes de resolver, imponha as condições de existência dos logaritmos.',
+      visual: 'flow',
+      flow: ['Defina o domínio', 'Use propriedades', 'Converta para potência se ajudar', 'Teste no domínio']
+    },
+    sistemasav: {
+      intuition: 'Sistemas avançados misturam técnicas. A estratégia vale tanto quanto a conta.',
+      definition: 'Sistemas não lineares ou com mais etapas combinam equações que podem exigir substituição, fatoração, gráficos ou restrições.',
+      vocabulary: ['Sistema não linear: pelo menos uma equação não é de primeiro grau.', 'Solução comum: valor que satisfaz todas as condições.', 'Restrição: valor que não pode ser usado.'],
+      habit: 'Escolha a equação mais simples para isolar uma variável e reduza o sistema aos poucos.',
+      visual: 'flow',
+      flow: ['Mapeie as restrições', 'Escolha uma estratégia', 'Reduza para uma incógnita', 'Verifique no sistema inteiro']
+    }
+  };
+
+  function theoryDetailFor(key) {
+    return THEORY_DETAILS[key] || {
+      intuition: 'Este tópico conecta ideias anteriores e organiza um método de resolução seguro.',
+      definition: 'Leia cada conceito com calma, acompanhe os exemplos e use a prática para confirmar se o método ficou claro.',
+      vocabulary: ['Conceito: ideia matemática principal.', 'Método: sequência de passos usada para resolver.', 'Verificação: teste que confirma a resposta.'],
+      habit: 'Depois de resolver, explique em uma frase por que a resposta faz sentido.',
+      visual: 'flow',
+      flow: ['Entenda a ideia', 'Aplique o método', 'Resolva com atenção', 'Verifique']
+    };
+  }
+
+  function renderTheoryList(items, className) {
+    return '<ul class="' + (className || 'theory-list') + '">' + (items || []).map((item) => '<li>' + displayText(item) + '</li>').join('') + '</ul>';
+  }
+
+  function renderTheoryCards(items, headingPrefix) {
+    return '<div class="theory-grid">' + (items || []).map((item, index) => '<article class="theory-card"><h4>' + escapeHtml(headingPrefix || 'Ponto') + ' ' + (index + 1) + '</h4><p>' + displayText(item) + '</p></article>').join('') + '</div>';
+  }
+
+  function renderFormulaList(formulas) {
+    if (!formulas || !formulas.length) return '<p>Este tópico é mais conceitual; acompanhe os exemplos para ver as ideias em ação.</p>';
+    return '<ul class="formula-list">' + formulas.map((formula) => '<li><span class="formula">' + displayText(formula) + '</span></li>').join('') + '</ul>';
+  }
+
+  function renderTheoryVisual(detail) {
+    if (detail.visual === 'line') {
+      return '<div class="theory-visual"><strong>Leitura visual</strong><div class="mini-number-line" aria-label="Reta numérica de menos quatro a quatro"><span>−4</span><span>−3</span><span>−2</span><span>−1</span><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span></div><p>Use a reta para pensar em distância, ordem e mudança de sinal.</p></div>';
+    }
+    return '<div class="theory-visual"><strong>Roteiro mental</strong><div class="mini-flow">' + (detail.flow || []).map((step) => '<span>' + displayText(step) + '</span>').join('') + '</div></div>';
+  }
+
+  function renderTheoryGuide() {
+    const target = byId('theory-guide');
+    if (!target || !DATA.module) return;
+    const mod = DATA.module;
+    const detail = theoryDetailFor(mod.key);
+    const example = buildQuestions(mod.key, 'basico', 1, 2027)[0];
+    const exampleHtml = example ? '<div class="example-split"><article class="theory-card"><h4>Questão comentada</h4><p><strong>Enunciado:</strong> ' + displayText(example.prompt) + '</p><p><strong>Resposta esperada:</strong> ' + displayText(formatExpected(example)) + '</p></article><article class="theory-card"><h4>Como pensar</h4>' + renderSteps(example.steps || []) + '</article></div>' : '<p>Use os exemplos resolvidos da próxima aba para ver o método em situações completas.</p>';
+    const prereq = mod.prerequisites && mod.prerequisites.length ? '<div><strong>Antes de seguir, revise:</strong>' + renderTheoryList(mod.prerequisites) + '</div>' : '';
+    target.innerHTML =
+      '<section class="theory-hero">' +
+        '<div><p class="badge">Teoria organizada</p><h2>' + escapeHtml(mod.title) + '</h2><p class="theory-lead">' + displayText(detail.intuition) + '</p><p>' + displayText(detail.definition) + '</p>' + prereq + '</div>' +
+        '<aside class="theory-aside"><strong>Hábito que evita erro</strong><p>' + displayText(detail.habit) + '</p>' + renderTheoryVisual(detail) + '</aside>' +
+      '</section>' +
+      '<section class="theory-section"><h3>Objetivos do estudo</h3>' + renderTheoryCards(mod.objectives || [], 'Objetivo') + '</section>' +
+      '<section class="theory-section"><h3>Vocabulário essencial</h3>' + renderTheoryCards(detail.vocabulary || [], 'Termo') + '</section>' +
+      '<section class="theory-section"><h3>Ideias que você precisa dominar</h3>' + renderTheoryCards(mod.concepts || [], 'Ideia') + '</section>' +
+      '<section class="theory-section"><h3>Fórmulas e formas importantes</h3>' + renderFormulaList(mod.formulas || []) + '</section>' +
+      '<section class="theory-section"><h3>Roteiro de resolução</h3>' + renderSteps(mod.steps || []) + '</section>' +
+      '<section class="theory-section"><h3>Exemplo guiado</h3>' + exampleHtml + '</section>' +
+      '<section class="theory-section"><h3>Erros comuns</h3>' + renderTheoryCards(mod.commonErrors || [], 'Cuidado') + '</section>' +
+      '<section class="theory-section"><h3>Checagem rápida</h3><p>Responda mentalmente antes de ir para a prática. Se travar, volte ao roteiro acima.</p>' + renderTheoryList((mod.quickQuestions || []).slice(0, 5)) + '</section>' +
+      '<section class="callout"><strong>Resumo para levar:</strong> leia a ideia central, acompanhe o método e só então resolva questões. A prática fica mais produtiva quando a teoria está organizada na cabeça.</section>';
+  }
+
+  let activeAccountId = '';
   const storage = {
     fallback: null,
+    key() {
+      return activeAccountId ? NS + ':' + activeAccountId : NS + ':guest';
+    },
     load() {
       const base = {
         version: 1,
@@ -936,7 +1557,7 @@
         lastActivity: ''
       };
       try {
-        const raw = localStorage.getItem(NS);
+        const raw = localStorage.getItem(this.key()) || (!activeAccountId ? localStorage.getItem(NS) : null);
         if (!raw) return base;
         const parsed = JSON.parse(raw);
         return merge(base, parsed);
@@ -948,7 +1569,7 @@
     save(state) {
       state.lastActivity = new Date().toISOString();
       try {
-        localStorage.setItem(NS, JSON.stringify(state));
+        localStorage.setItem(this.key(), JSON.stringify(state));
       } catch (error) {
         this.fallback = state;
       }
@@ -1011,16 +1632,24 @@
     const root = document.documentElement;
     const settings = state.settings || {};
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = settings.theme === 'auto' ? (prefersDark ? 'dark' : 'light') : settings.theme;
+    const themeSetting = settings.theme || 'auto';
+    const fontSetting = settings.font || 'normal';
+    const theme = themeSetting === 'auto' ? (prefersDark ? 'dark' : 'light') : themeSetting;
     root.dataset.theme = theme || 'light';
     root.dataset.contrast = settings.contrast ? 'high' : 'normal';
     root.dataset.motion = settings.motion === false ? 'off' : 'on';
-    const scale = settings.font === 'large' ? '1.12' : settings.font === 'small' ? '.94' : '1';
+    const scale = fontSetting === 'large' ? '1.12' : fontSetting === 'small' ? '.94' : '1';
     root.style.setProperty('--font-scale', scale);
     qsa('[data-setting-value]').forEach((node) => {
       const name = node.getAttribute('data-setting-value');
-      if (name === 'theme') node.textContent = settings.theme || 'auto';
-      if (name === 'font') node.textContent = settings.font || 'normal';
+      if (name === 'theme') node.textContent = themeSetting;
+      if (name === 'font') node.textContent = fontSetting;
+    });
+    qsa('[data-action="set-theme"]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.theme === themeSetting));
+    });
+    qsa('[data-action="set-font"]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.font === fontSetting));
     });
   }
 
@@ -1112,45 +1741,106 @@
   }
 
   function setSyncStatus(message, tone, announce) {
-    const node = byId('sync-status');
-    if (node) {
+    qsa('[data-auth-status]').forEach((node) => {
       node.textContent = message;
       node.dataset.tone = tone || 'muted';
-    }
+    });
     if (announce) toast(message);
+  }
+
+  function loginSlug(name) {
+    return safeText(name)
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 48);
+  }
+
+  function loginEmailFromName(name) {
+    const slug = loginSlug(name);
+    return slug ? slug + '@mathbia.local' : '';
+  }
+
+  function userDisplayName(user) {
+    if (!user) return 'Aguardando login.';
+    const meta = user.user_metadata || {};
+    if (meta.display_name) return meta.display_name;
+    if (meta.login_name) return meta.login_name;
+    return user.email ? user.email.split('@')[0] : 'Conta conectada';
+  }
+
+  function syncNameFields(name) {
+    if (!name) return;
+    qsa('[data-auth-name]').forEach((input) => {
+      if (!input.value) input.value = name;
+    });
   }
 
   function renderCloudPanel() {
     const configured = hasSupabaseConfig() && Boolean(window.supabase && window.supabase.createClient);
     cloudState.configured = configured;
-    const authPanel = byId('auth-panel');
+    const signedIn = Boolean(cloudState.user);
+    document.body.classList.toggle('auth-locked', !signedIn);
     const cloudPanel = byId('cloud-panel');
     const cloudUser = byId('cloud-user');
-    if (authPanel) authPanel.hidden = Boolean(cloudState.user) || !configured;
-    if (cloudPanel) cloudPanel.hidden = !cloudState.user || !configured;
-    if (cloudUser && cloudState.user) cloudUser.textContent = cloudState.user.email || 'Conta conectada';
-    if (authPanel) qsa('input, button', authPanel).forEach((node) => { node.disabled = !configured; });
+    const profileName = byId('profile-name');
+    const displayName = userDisplayName(cloudState.user);
+    const loginGate = byId('login-gate');
+    if (loginGate) loginGate.hidden = signedIn;
+    qsa('#auth-panel').forEach((panel) => { panel.hidden = signedIn || !configured; });
+    if (cloudPanel) cloudPanel.hidden = !signedIn || !configured;
+    if (cloudUser && signedIn) cloudUser.textContent = displayName;
+    if (profileName) profileName.textContent = displayName;
+    if (signedIn) syncNameFields(displayName);
+    qsa('[data-auth-name], [data-auth-password], #auth-signin, #auth-signup, #gate-signin, #gate-signup').forEach((node) => {
+      node.disabled = !configured;
+    });
     if (!configured) {
       setSyncStatus(window.supabase ? 'Supabase não configurado.' : 'Biblioteca do Supabase indisponível.', 'warning', false);
-    } else if (cloudState.user) {
-      setSyncStatus('Conectado. Progresso sincronizado por usuário.', 'success', false);
+    } else if (signedIn) {
+      setSyncStatus('Conectado. Estatísticas separadas para ' + displayName + '.', 'success', false);
     } else {
-      setSyncStatus('Entre para sincronizar seu progresso.', 'muted', false);
+      setSyncStatus('Entre ou crie sua conta para começar.', 'muted', false);
     }
   }
 
-  function authFields() {
-    const email = byId('auth-email') ? byId('auth-email').value.trim() : '';
-    const password = byId('auth-password') ? byId('auth-password').value : '';
-    if (!email || !password) {
-      setSyncStatus('Informe e-mail e senha.', 'warning', true);
+  function authFields(scope) {
+    const root = typeof scope === 'string' ? document.querySelector(scope) : (scope && scope.querySelector ? scope : document);
+    const nameInput = root ? root.querySelector('[data-auth-name]') : null;
+    const passwordInput = root ? root.querySelector('[data-auth-password]') : null;
+    const loginName = nameInput ? nameInput.value.trim().replace(/s+/g, ' ') : '';
+    const password = passwordInput ? passwordInput.value : '';
+    if (loginName.length < 2) {
+      setSyncStatus('Informe um nome com pelo menos 2 caracteres.', 'warning', true);
+      if (nameInput) nameInput.focus();
       return null;
     }
-    return { email, password };
+    if (password.length < 6) {
+      setSyncStatus('A senha precisa ter pelo menos 6 caracteres.', 'warning', true);
+      if (passwordInput) passwordInput.focus();
+      return null;
+    }
+    const email = loginEmailFromName(loginName);
+    if (!email) {
+      setSyncStatus('Use pelo menos uma letra ou número no nome.', 'warning', true);
+      if (nameInput) nameInput.focus();
+      return null;
+    }
+    return { email, password, displayName: loginName, loginName: loginSlug(loginName) };
   }
 
   function hasLocalProgress() {
-    try { return Boolean(localStorage.getItem(NS)); } catch (error) { return false; }
+    try { return Boolean(localStorage.getItem(storage.key())); } catch (error) { return false; }
+  }
+
+  function switchAccountStorage(userId) {
+    const next = userId || '';
+    if (activeAccountId === next) return;
+    activeAccountId = next;
+    state = storage.load();
+    refreshAfterCloudMerge();
   }
 
   function refreshAfterCloudMerge() {
@@ -1160,6 +1850,7 @@
     renderErrors();
     drawStatsChart();
     if (DATA.module) {
+      renderTheoryGuide();
     }
     if (DATA.type === 'review') initReviewPage();
     if (DATA.type === 'sim') initSimPage();
@@ -1213,37 +1904,44 @@
     cloudState.timer = window.setTimeout(() => pushCloudProgress(true), 900);
   }
 
-  async function signInCloud() {
+  async function signInCloud(scope) {
     const client = getSupabaseClient();
-    const fields = authFields();
+    const fields = authFields(scope);
     if (!client || !fields) return;
     setSyncStatus('Entrando...', 'muted', false);
-    const response = await client.auth.signInWithPassword(fields);
+    const response = await client.auth.signInWithPassword({ email: fields.email, password: fields.password });
     if (response.error) {
-      setSyncStatus('Não foi possível entrar.', 'danger', true);
+      setSyncStatus('Não consegui entrar. Confira o nome e a senha.', 'danger', true);
       return;
     }
     cloudState.user = response.data.user;
+    switchAccountStorage(cloudState.user ? cloudState.user.id : '');
     renderCloudPanel();
     await pullCloudProgress();
   }
 
-  async function signUpCloud() {
+  async function signUpCloud(scope) {
     const client = getSupabaseClient();
-    const fields = authFields();
+    const fields = authFields(scope);
     if (!client || !fields) return;
     setSyncStatus('Criando conta...', 'muted', false);
-    const response = await client.auth.signUp(fields);
+    const response = await client.auth.signUp({
+      email: fields.email,
+      password: fields.password,
+      options: { data: { display_name: fields.displayName, login_name: fields.loginName } }
+    });
     if (response.error) {
-      setSyncStatus('Não foi possível criar a conta.', 'danger', true);
+      setSyncStatus('Não consegui criar a conta. Talvez esse nome já esteja em uso.', 'danger', true);
       return;
     }
-    cloudState.user = response.data.user || null;
+    const sessionUser = response.data.session && response.data.session.user ? response.data.session.user : null;
+    cloudState.user = sessionUser;
+    if (cloudState.user) switchAccountStorage(cloudState.user.id);
     renderCloudPanel();
-    if (response.data.session && cloudState.user) {
+    if (cloudState.user) {
       await pullCloudProgress();
     } else {
-      setSyncStatus('Conta criada. Confirme pelo e-mail para entrar.', 'success', true);
+      setSyncStatus('Conta criada. Se não entrar automaticamente, desative a confirmação de e-mail no Supabase e depois use Entrar.', 'warning', true);
     }
   }
 
@@ -1252,6 +1950,7 @@
     if (!client) return;
     await client.auth.signOut();
     cloudState.user = null;
+    switchAccountStorage('');
     renderCloudPanel();
     setSyncStatus('Conta desconectada.', 'muted', true);
   }
@@ -1260,10 +1959,23 @@
     renderCloudPanel();
     const signIn = byId('auth-signin');
     const signUp = byId('auth-signup');
+    const gateSignIn = byId('gate-signin');
+    const gateSignUp = byId('gate-signup');
     const signOut = byId('auth-signout');
     const sync = byId('cloud-sync');
-    if (signIn) signIn.addEventListener('click', signInCloud);
-    if (signUp) signUp.addEventListener('click', signUpCloud);
+    const loginForm = byId('login-form');
+    if (signIn) signIn.addEventListener('click', () => signInCloud('#settings-drawer'));
+    if (signUp) signUp.addEventListener('click', () => signUpCloud('#settings-drawer'));
+    if (gateSignIn) gateSignIn.addEventListener('click', () => signInCloud('#login-gate'));
+    if (gateSignUp) gateSignUp.addEventListener('click', () => signUpCloud('#login-gate'));
+    if (loginForm) loginForm.addEventListener('submit', (event) => { event.preventDefault(); signInCloud('#login-gate'); });
+    qsa('[data-auth-name], [data-auth-password]').forEach((input) => {
+      input.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter') return;
+        event.preventDefault();
+        signInCloud(input.closest('#login-gate') ? '#login-gate' : '#settings-drawer');
+      });
+    });
     if (signOut) signOut.addEventListener('click', signOutCloud);
     if (sync) sync.addEventListener('click', () => pushCloudProgress(false));
     const client = getSupabaseClient();
@@ -1274,10 +1986,12 @@
     try {
       const sessionResponse = await client.auth.getSession();
       cloudState.user = sessionResponse.data && sessionResponse.data.session ? sessionResponse.data.session.user : null;
+      switchAccountStorage(cloudState.user ? cloudState.user.id : '');
       renderCloudPanel();
       if (cloudState.user) await pullCloudProgress();
       client.auth.onAuthStateChange((_event, sessionData) => {
         cloudState.user = sessionData && sessionData.user ? sessionData.user : null;
+        switchAccountStorage(cloudState.user ? cloudState.user.id : '');
         renderCloudPanel();
         if (cloudState.user) pullCloudProgress();
       });
@@ -1454,6 +2168,7 @@
     stats.visited += 1;
     state.lastModule = DATA.currentFile;
     save();
+    renderTheoryGuide();
     renderModuleProgress();
     renderExamples();
     setupPractice();

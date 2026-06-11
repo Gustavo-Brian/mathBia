@@ -1,6 +1,6 @@
 # MathBia
 
-Plataforma estatica de estudos de equacoes, com progresso local e sincronizacao por usuario via Supabase.
+Plataforma estatica de estudos de equacoes, com login simples, teoria guiada, pratica interativa, estatisticas por usuario e sincronizacao via Supabase.
 
 ## Arquivos principais
 
@@ -11,19 +11,23 @@ Plataforma estatica de estudos de equacoes, com progresso local e sincronizacao 
 - `supabase-schema.sql`: tabela e policies RLS para progresso por usuario.
 - `supabase-instrucoes.md`: passo a passo de configuracao.
 
-## Deploy com GitHub Pages
+## Deploy com Vercel
 
-1. Suba estes arquivos para a branch `main`.
-2. No GitHub, abra `Settings > Pages`.
-3. Em `Build and deployment`, escolha `Deploy from a branch`.
-4. Selecione `main` e pasta `/root`.
-5. Acesse `https://gustavo-brian.github.io/mathBia/`.
+1. Importe o repositorio `Gustavo-Brian/mathBia` no Vercel.
+2. Use `Other` como preset.
+3. Mantenha `Root Directory` como `./`.
+4. Nao precisa configurar build command nem output directory.
+5. Clique em `Deploy`.
+
+Como o projeto e estatico, o Vercel publica os arquivos HTML diretamente.
 
 ## Supabase Auth
 
-No Supabase, em `Authentication > URL Configuration`, configure:
+No Supabase, em `Authentication > Providers`, deixe `Email` ativo e desative `Confirm email`, porque a tela usa conta simples com `Nome` e `Senha`.
 
-- Site URL: `https://gustavo-brian.github.io/mathBia/`.
-- Redirect URLs: `https://gustavo-brian.github.io/mathBia/` e URLs locais usadas em teste, como `http://localhost:4173/`.
+Em `Authentication > URL Configuration`, configure:
+
+- Site URL: a URL final do Vercel, por exemplo `https://math-bia.vercel.app/`.
+- Redirect URLs: a mesma URL do Vercel e URLs locais usadas em teste, como `http://localhost:4173/`.
 
 Use sempre a chave publica `anon`/`publishable` no frontend. Nunca use `service_role` nem string direta do Postgres em arquivos do site.
