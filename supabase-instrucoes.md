@@ -24,7 +24,7 @@ Use somente a chave publica `anon`/`publishable` no frontend. Nunca coloque a `s
 
 ## 3. Ativar conta simples
 
-A interface mostra apenas `Nome` e `Senha`. Por baixo, o app transforma o nome em um identificador interno no formato `nome@mathbia.local`, porque o Supabase Auth trabalha com e-mail/senha.
+A interface mostra apenas `Nome`. Por baixo, o app transforma o nome em um identificador interno no formato `nome@mathbia.local` e gera uma senha tecnica automaticamente, porque o Supabase Auth trabalha com e-mail/senha.
 
 Uma nova aba sempre comeca na tela de cadastro/login. Depois que a pessoa entra, ela pode navegar entre os modulos naquela mesma aba sem precisar repetir o login.
 
@@ -33,7 +33,7 @@ No painel do Supabase:
 1. Va em `Authentication > Providers`.
 2. Deixe `Email` ativo.
 3. Deixe `Confirm email` desativado para este projeto de teste com pessoas conhecidas.
-4. Mantenha senha minima de 6 caracteres, que e o minimo esperado pelo Supabase.
+4. Nao e preciso pedir senha para o estudante; o app cuida disso internamente.
 
 Se `Confirm email` ficar ativado, a conta pode ser criada sem entrar automaticamente, porque o e-mail interno nao e uma caixa real.
 
@@ -55,4 +55,4 @@ Se o Vercel gerar uma URL diferente, use exatamente a URL mostrada no dashboard.
 
 ## 5. Testar
 
-Abra o site, crie uma conta com nome e senha, resolva algumas questoes e confira no Supabase se a tabela `user_progress` recebeu uma linha para esse usuario.
+Abra o site, entre com um nome, resolva algumas questoes e confira no Supabase se a tabela `user_progress` recebeu uma linha para esse usuario.

@@ -174,8 +174,7 @@
       margin: 0;
       line-height: 1.15;
     }
-    .login-form input,
-    .auth-fields input {
+    .login-form input {
       width: 100%;
       min-height: 2.75rem;
       border: 1px solid var(--border);
@@ -228,6 +227,118 @@
       font-weight: 900;
     }
     .top-actions { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .top-left {
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+    .home-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      min-height: 2.55rem;
+      padding: .45rem .7rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+      box-shadow: 0 6px 18px rgba(23, 32, 51, 0.08);
+    }
+    .home-button svg {
+      width: 1.15rem;
+      height: 1.15rem;
+      flex: 0 0 auto;
+    }
+    .home-button:hover,
+    .home-button:focus-visible,
+    .profile-button:hover,
+    .profile-button:focus-visible {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
+    }
+    .top-title {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 900;
+    }
+    .profile-button {
+      width: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      min-height: 2.55rem;
+      padding: .35rem .7rem .35rem .4rem;
+      border-radius: 999px;
+      font-weight: 850;
+      background: var(--surface);
+    }
+    .profile-dot,
+    .profile-avatar-large {
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: var(--on-primary);
+      font-weight: 900;
+      text-transform: uppercase;
+      flex: 0 0 auto;
+    }
+    .profile-dot {
+      width: 1.85rem;
+      height: 1.85rem;
+      font-size: .82rem;
+    }
+    .profile-avatar-large {
+      width: 3.1rem;
+      height: 3.1rem;
+      font-size: 1.15rem;
+    }
+    .profile-person {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .8rem;
+      align-items: center;
+    }
+    .profile-person > div,
+    .profile-muted {
+      min-width: 0;
+    }
+    .profile-muted {
+      color: var(--muted);
+      font-size: .92rem;
+      overflow-wrap: anywhere;
+    }
+    .profile-actions {
+      margin-top: .15rem;
+      background: color-mix(in srgb, var(--surface-3) 42%, var(--surface));
+    }
+    .profile-actions p {
+      color: var(--muted);
+    }
+    .signout-button {
+      width: 100%;
+      border-color: color-mix(in srgb, var(--danger) 45%, var(--border));
+      color: var(--danger);
+      background: var(--surface);
+    }
+    .signout-button:hover,
+    .signout-button:focus-visible {
+      background: color-mix(in srgb, var(--danger) 10%, var(--surface));
+      border-color: var(--danger);
+      outline: none;
+    }
+    .login-form .auth-actions {
+      grid-template-columns: 1fr;
+    }
+
     .layout {
       display: grid;
       grid-template-columns: minmax(14rem, 18rem) minmax(0, 1fr);
@@ -328,20 +439,6 @@
       gap: .65rem;
       flex-wrap: wrap;
       align-items: center;
-    }
-    .account-panel {
-      display: grid;
-      gap: .7rem;
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-    }
-    .account-panel h3,
-    .account-panel p { margin: 0; }
-    .auth-fields {
-      display: grid;
-      gap: .55rem;
-      min-width: 0;
     }
     .auth-user,
     .sync-status {
@@ -673,14 +770,6 @@
       font-weight: 800;
       overflow-wrap: anywhere;
     }
-    .auth-fields {
-      display: grid;
-      gap: .55rem;
-    }
-    .cloud-panel {
-      display: grid;
-      gap: .65rem;
-    }
     .segmented {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -738,7 +827,6 @@
       align-content: center;
     }
     .button-row > *, .hero-actions > *, .practice-controls > *, .settings-grid > * { min-width: 0; }
-    .account-button { width: auto; padding-inline: 1rem; }
     .theory-guide {
       display: grid;
       gap: 1rem;
@@ -1061,7 +1149,12 @@
     }
 
     @media (max-width: 620px) {
-      .topbar { align-items: flex-start; }
+      .topbar { align-items: center; gap: .6rem; padding-inline: .75rem; }
+      .top-left { gap: .45rem; }
+      .home-button { width: 2.75rem; min-width: 2.75rem; padding-inline: 0; border-radius: 50%; }
+      .home-button span { display: none; }
+      .profile-button { max-width: 8.75rem; }
+      .profile-text { max-width: 4.4rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .brand span:last-child { display: none; }
       .section { padding: 1rem; }
       .module-card { min-height: auto; }
@@ -1098,7 +1191,7 @@
       <div class="login-intro">
         <p class="badge">Trilha de Equações</p>
         <h1 id="login-title">Entre para estudar</h1>
-        <p>Crie uma conta simples para salvar estatísticas, continuar de onde parou e acompanhar sua evolução em teoria e prática.</p>
+        <p>Digite seu nome para salvar estatísticas, continuar de onde parou e acompanhar sua evolução em teoria e prática.</p>
         <ul class="login-benefits">
           <li>Progresso separado para cada estudante.</li>
           <li>Caderno de erros e histórico de questões.</li>
@@ -1106,30 +1199,33 @@
         </ul>
       </div>
       <form id="login-form" class="login-form" autocomplete="on">
-        <h2>Conta simples</h2>
-        <p id="gate-status" class="sync-status" data-auth-status aria-live="polite">Entre ou crie sua conta para começar.</p>
+        <h2>Identificação</h2>
+        <p id="gate-status" class="sync-status" data-auth-status aria-live="polite">Digite seu nome para começar.</p>
         <label for="gate-name">Nome</label>
-        <input id="gate-name" data-auth-name type="text" autocomplete="username" placeholder="Ex.: bia" maxlength="40">
-        <label for="gate-password">Senha</label>
-        <input id="gate-password" data-auth-password type="password" autocomplete="current-password" minlength="6" placeholder="Mínimo de 6 caracteres">
+        <input id="gate-name" data-auth-name type="text" autocomplete="username" placeholder="Ex.: Bia" maxlength="40">
         <div class="button-row auth-actions">
-          <button id="gate-signin" type="button">Entrar</button>
-          <button id="gate-signup" class="primary" type="button">Criar conta</button>
+          <button id="gate-signin" class="primary" type="button">Entrar</button>
         </div>
-        <p class="auth-note">Use um nome fácil de lembrar. A senha precisa ter pelo menos 6 caracteres por exigência do Supabase.</p>
+        <p class="auth-note">Use sempre o mesmo nome para recuperar suas estatísticas.</p>
       </form>
     </div>
   </section>
   <div class="app-shell">
 
     <header class="topbar">
-      <a class="brand" href="index.html" aria-label="Ir para o início">
-        <span class="brand-mark">Σ</span>
-        <span>Trilha de Equações</span>
-      </a>
+      <div class="top-left">
+        <a class="home-button" href="index.html" aria-label="Voltar para a tela principal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5h-5.2v-6.2H8.7V21H3.5a.5.5 0 0 1-.5-.5v-9.7Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>
+          <span>Início</span>
+        </a>
+        <span class="top-title">Trilha de Equações</span>
+      </div>
       <div class="top-actions">
         <button id="menu-toggle" class="icon-button mobile-only" type="button" aria-label="Mostrar menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-        <button id="settings-toggle" class="account-button" type="button" aria-label="Abrir perfil e leitura" aria-expanded="false">Perfil</button>
+        <button id="settings-toggle" class="profile-button" type="button" aria-label="Abrir perfil" aria-expanded="false">
+          <span id="profile-initials" class="profile-dot" aria-hidden="true">P</span>
+          <span class="profile-text">Perfil</span>
+        </button>
       </div>
     </header>
 
@@ -1187,35 +1283,20 @@
         <aside id="settings-drawer" class="drawer profile-drawer" aria-label="Perfil e leitura">
       <div class="drawer-heading">
         <p class="badge">Perfil</p>
-        <h2>Conta e leitura</h2>
-        <p>Gerencie seu acesso e ajuste apenas o que ajuda a estudar com conforto.</p>
+        <h2>Seu espaço</h2>
+        <p>Veja quem está estudando e ajuste a leitura sem mexer no conteúdo.</p>
       </div>
 
       <section class="drawer-section profile-summary" aria-labelledby="profile-title">
-        <h3 id="profile-title">Estudante</h3>
-        <p id="profile-name" class="auth-user">Aguardando login.</p>
+        <div class="profile-person">
+          <span id="drawer-profile-initials" class="profile-avatar-large" aria-hidden="true">P</span>
+          <div>
+            <h3 id="profile-title">Estudante</h3>
+            <p id="profile-name" class="auth-user">Aguardando login.</p>
+            <p class="profile-muted">Conta conectada: <strong id="cloud-user">usuário</strong></p>
+          </div>
+        </div>
         <p id="sync-status" class="sync-status" data-auth-status aria-live="polite">Supabase não configurado.</p>
-      </section>
-
-      <section class="drawer-section account-panel" aria-labelledby="account-title">
-        <h3 id="account-title">Conta</h3>
-        <div id="auth-panel" class="auth-fields">
-          <label for="auth-name">Nome</label>
-          <input id="auth-name" data-auth-name type="text" autocomplete="username" placeholder="Ex.: bia" maxlength="40">
-          <label for="auth-password">Senha</label>
-          <input id="auth-password" data-auth-password type="password" autocomplete="current-password" minlength="6" placeholder="Mínimo de 6 caracteres">
-          <div class="button-row auth-actions">
-            <button id="auth-signin" type="button">Entrar</button>
-            <button id="auth-signup" class="primary" type="button">Criar conta</button>
-          </div>
-        </div>
-        <div id="cloud-panel" class="cloud-panel" hidden>
-          <p>Conta conectada: <strong id="cloud-user">usuário</strong></p>
-          <div class="button-row">
-            <button id="cloud-sync" type="button">Sincronizar agora</button>
-            <button id="auth-signout" type="button">Sair</button>
-          </div>
-        </div>
       </section>
 
       <section class="drawer-section reading-panel" aria-labelledby="reading-title">
@@ -1237,6 +1318,11 @@
           <strong>Prévia</strong>
           <span>Equações ficam mais fáceis quando cada transformação preserva o equilíbrio.</span>
         </div>
+      </section>
+
+      <section class="drawer-section profile-actions" aria-label="Sessão">
+        <p>Sair encerra esta sessão e volta para a tela inicial de nome.</p>
+        <button id="auth-signout" class="signout-button" type="button">Sair da conta</button>
       </section>
     </aside>
 
@@ -1756,12 +1842,22 @@
     return slug ? slug + '@mathbia.local' : '';
   }
 
+  function passwordForName(name) {
+    return 'MathBia-' + loginSlug(name) + '-acesso-2026';
+  }
+
   function userDisplayName(user) {
     if (!user) return 'Aguardando login.';
     const meta = user.user_metadata || {};
     if (meta.display_name) return meta.display_name;
     if (meta.login_name) return meta.login_name;
     return user.email ? user.email.split('@')[0] : 'Conta conectada';
+  }
+
+  function initialsFromName(name) {
+    const clean = safeText(name).trim();
+    if (!clean || clean === 'Aguardando login.') return 'P';
+    return clean.split(/\s+/).slice(0, 2).map((part) => part.charAt(0)).join('').toUpperCase();
   }
 
   function syncNameFields(name) {
@@ -1787,18 +1883,20 @@
     cloudState.configured = configured;
     const signedIn = Boolean(cloudState.user);
     document.body.classList.toggle('auth-locked', !signedIn);
-    const cloudPanel = byId('cloud-panel');
     const cloudUser = byId('cloud-user');
     const profileName = byId('profile-name');
+    const profileInitials = byId('profile-initials');
+    const drawerInitials = byId('drawer-profile-initials');
     const displayName = userDisplayName(cloudState.user);
+    const initials = initialsFromName(displayName);
     const loginGate = byId('login-gate');
     if (loginGate) loginGate.hidden = signedIn;
-    qsa('#auth-panel').forEach((panel) => { panel.hidden = signedIn || !configured; });
-    if (cloudPanel) cloudPanel.hidden = !signedIn || !configured;
     if (cloudUser && signedIn) cloudUser.textContent = displayName;
     if (profileName) profileName.textContent = displayName;
+    if (profileInitials) profileInitials.textContent = initials;
+    if (drawerInitials) drawerInitials.textContent = initials;
     if (signedIn) syncNameFields(displayName);
-    qsa('[data-auth-name], [data-auth-password], #auth-signin, #auth-signup, #gate-signin, #gate-signup').forEach((node) => {
+    qsa('[data-auth-name], #gate-signin').forEach((node) => {
       node.disabled = !configured;
     });
     if (!configured) {
@@ -1806,24 +1904,17 @@
     } else if (signedIn) {
       setSyncStatus('Conectado. Estatísticas separadas para ' + displayName + '.', 'success', false);
     } else {
-      setSyncStatus('Entre ou crie sua conta para começar.', 'muted', false);
+      setSyncStatus('Digite seu nome para começar.', 'muted', false);
     }
   }
 
   function authFields(scope) {
     const root = typeof scope === 'string' ? document.querySelector(scope) : (scope && scope.querySelector ? scope : document);
     const nameInput = root ? root.querySelector('[data-auth-name]') : null;
-    const passwordInput = root ? root.querySelector('[data-auth-password]') : null;
-    const loginName = nameInput ? nameInput.value.trim().replace(/s+/g, ' ') : '';
-    const password = passwordInput ? passwordInput.value : '';
+    const loginName = nameInput ? nameInput.value.trim().replace(/\s+/g, ' ') : '';
     if (loginName.length < 2) {
       setSyncStatus('Informe um nome com pelo menos 2 caracteres.', 'warning', true);
       if (nameInput) nameInput.focus();
-      return null;
-    }
-    if (password.length < 6) {
-      setSyncStatus('A senha precisa ter pelo menos 6 caracteres.', 'warning', true);
-      if (passwordInput) passwordInput.focus();
       return null;
     }
     const email = loginEmailFromName(loginName);
@@ -1832,7 +1923,7 @@
       if (nameInput) nameInput.focus();
       return null;
     }
-    return { email, password, displayName: loginName, loginName: loginSlug(loginName) };
+    return { email, password: passwordForName(loginName), displayName: loginName, loginName: loginSlug(loginName) };
   }
 
   function hasLocalProgress() {
@@ -1913,42 +2004,33 @@
     const fields = authFields(scope);
     if (!client || !fields) return;
     setSyncStatus('Entrando...', 'muted', false);
-    const response = await client.auth.signInWithPassword({ email: fields.email, password: fields.password });
+    let response = await client.auth.signInWithPassword({ email: fields.email, password: fields.password });
     if (response.error) {
-      setSyncStatus('Não consegui entrar. Confira o nome e a senha.', 'danger', true);
-      return;
+      setSyncStatus('Criando acesso para este nome...', 'muted', false);
+      response = await client.auth.signUp({
+        email: fields.email,
+        password: fields.password,
+        options: { data: { display_name: fields.displayName, login_name: fields.loginName } }
+      });
+      if (response.error) {
+        setSyncStatus('Não consegui entrar com esse nome. Tente outro nome.', 'danger', true);
+        return;
+      }
+      const sessionUser = response.data.session && response.data.session.user ? response.data.session.user : null;
+      setSessionUnlocked(Boolean(sessionUser));
+      cloudState.user = sessionUser;
+      if (!cloudState.user) {
+        renderCloudPanel();
+        setSyncStatus('Acesso criado, mas o Supabase ainda pediu confirmação. Desative Confirm email e tente novamente.', 'warning', true);
+        return;
+      }
+    } else {
+      setSessionUnlocked(true);
+      cloudState.user = response.data.user;
     }
-    setSessionUnlocked(true);
-    cloudState.user = response.data.user;
     switchAccountStorage(cloudState.user ? cloudState.user.id : '');
     renderCloudPanel();
     await pullCloudProgress();
-  }
-
-  async function signUpCloud(scope) {
-    const client = getSupabaseClient();
-    const fields = authFields(scope);
-    if (!client || !fields) return;
-    setSyncStatus('Criando conta...', 'muted', false);
-    const response = await client.auth.signUp({
-      email: fields.email,
-      password: fields.password,
-      options: { data: { display_name: fields.displayName, login_name: fields.loginName } }
-    });
-    if (response.error) {
-      setSyncStatus('Não consegui criar a conta. Talvez esse nome já esteja em uso.', 'danger', true);
-      return;
-    }
-    const sessionUser = response.data.session && response.data.session.user ? response.data.session.user : null;
-    setSessionUnlocked(Boolean(sessionUser));
-    cloudState.user = sessionUser;
-    if (cloudState.user) switchAccountStorage(cloudState.user.id);
-    renderCloudPanel();
-    if (cloudState.user) {
-      await pullCloudProgress();
-    } else {
-      setSyncStatus('Conta criada. Se não entrar automaticamente, desative a confirmação de e-mail no Supabase e depois use Entrar.', 'warning', true);
-    }
   }
 
   async function signOutCloud() {
@@ -1964,27 +2046,19 @@
 
   async function setupCloudSync() {
     renderCloudPanel();
-    const signIn = byId('auth-signin');
-    const signUp = byId('auth-signup');
     const gateSignIn = byId('gate-signin');
-    const gateSignUp = byId('gate-signup');
     const signOut = byId('auth-signout');
-    const sync = byId('cloud-sync');
     const loginForm = byId('login-form');
-    if (signIn) signIn.addEventListener('click', () => signInCloud('#settings-drawer'));
-    if (signUp) signUp.addEventListener('click', () => signUpCloud('#settings-drawer'));
     if (gateSignIn) gateSignIn.addEventListener('click', () => signInCloud('#login-gate'));
-    if (gateSignUp) gateSignUp.addEventListener('click', () => signUpCloud('#login-gate'));
     if (loginForm) loginForm.addEventListener('submit', (event) => { event.preventDefault(); signInCloud('#login-gate'); });
-    qsa('[data-auth-name], [data-auth-password]').forEach((input) => {
+    qsa('[data-auth-name]').forEach((input) => {
       input.addEventListener('keydown', (event) => {
         if (event.key !== 'Enter') return;
         event.preventDefault();
-        signInCloud(input.closest('#login-gate') ? '#login-gate' : '#settings-drawer');
+        signInCloud('#login-gate');
       });
     });
     if (signOut) signOut.addEventListener('click', signOutCloud);
-    if (sync) sync.addEventListener('click', () => pushCloudProgress(false));
     const client = getSupabaseClient();
     if (!client) {
       renderCloudPanel();

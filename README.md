@@ -1,6 +1,6 @@
 # MathBia
 
-Plataforma estatica de estudos de equacoes, com login simples, teoria guiada, pratica interativa, estatisticas por usuario e sincronizacao via Supabase. Uma nova aba sempre inicia na tela de cadastro/login; depois de entrar, a navegacao entre paginas continua liberada naquela aba.
+Plataforma estatica de estudos de equacoes, com entrada simples por nome, teoria guiada, pratica interativa, estatisticas por usuario e sincronizacao via Supabase. Uma nova aba sempre inicia na tela de cadastro/login; depois de entrar, a navegacao entre paginas continua liberada naquela aba.
 
 ## Arquivos principais
 
@@ -13,7 +13,7 @@ Plataforma estatica de estudos de equacoes, com login simples, teoria guiada, pr
 
 ## Deploy com Vercel
 
-1. Importe o repositorio `Gustavo-Brian/mathBia` no Vercel.
+1. Importe o repositorio `Gustavo-Brian/math` no Vercel.
 2. Use `Other` como preset.
 3. Mantenha `Root Directory` como `./`.
 4. Nao precisa configurar build command nem output directory.
@@ -23,7 +23,7 @@ Como o projeto e estatico, o Vercel publica os arquivos HTML diretamente.
 
 ## Supabase Auth
 
-No Supabase, em `Authentication > Providers`, deixe `Email` ativo e desative `Confirm email`, porque a tela usa conta simples com `Nome` e `Senha`.
+No Supabase, em `Authentication > Providers`, deixe `Email` ativo e desative `Confirm email`, porque a tela usa entrada simples apenas com `Nome`.
 
 Em `Authentication > URL Configuration`, configure:
 
