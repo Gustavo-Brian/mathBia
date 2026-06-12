@@ -89,6 +89,14 @@
       overflow-x: hidden;
     }
 
+    img, svg, canvas, video {
+      max-width: 100%;
+    }
+
+    main, section, article, aside, nav, header, footer, form {
+      min-width: 0;
+    }
+
     p, li, h1, h2, h3, h4, summary, label, .module-card, .stat-card, .question-panel, .feedback, .callout {
       overflow-wrap: break-word;
     }
@@ -106,12 +114,20 @@
       transition: top .2s ease;
     }
     .skip-link:focus { top: 1rem; }
-    .app-shell { min-height: 100vh; }
+    .app-shell {
+      width: 100%;
+      min-height: 100vh;
+    }
+    @supports (min-height: 100dvh) {
+      .app-shell { min-height: 100dvh; }
+      .login-gate { min-height: 100dvh; }
+    }
     body.auth-locked {
       overflow: hidden;
     }
     body.auth-locked .app-shell,
-    body.auth-locked #settings-drawer {
+    body.auth-locked #settings-drawer,
+    body.auth-locked #profile-drawer {
       display: none !important;
     }
     body:not(.auth-locked) .login-gate {
@@ -123,75 +139,56 @@
       z-index: 120;
       display: grid;
       place-items: center;
-      padding: clamp(1rem, 4vw, 2rem);
-      background:
-        linear-gradient(135deg, color-mix(in srgb, var(--surface-2) 72%, var(--surface)), var(--surface)),
-        var(--bg);
+      padding: clamp(1rem, 6vw, 2rem);
+      background: var(--bg);
       overflow: auto;
     }
     .login-card {
-      width: min(58rem, 100%);
+      width: min(24rem, 100%);
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(18rem, .95fr);
-      gap: clamp(1rem, 3vw, 1.5rem);
-      align-items: stretch;
+      gap: .75rem;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
-      box-shadow: var(--shadow);
-      overflow: hidden;
+      box-shadow: 0 14px 34px rgba(23, 32, 51, 0.12);
+      padding: clamp(1.25rem, 5vw, 1.75rem);
     }
-    .login-intro,
-    .login-form {
-      min-width: 0;
-      padding: clamp(1.1rem, 3vw, 2rem);
-    }
-    .login-intro {
-      display: grid;
-      align-content: center;
-      gap: .85rem;
-      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 13%, var(--surface-2)), var(--surface-3));
-    }
-    .login-intro h1 {
+    .login-kicker {
       margin: 0;
-      font-size: clamp(2rem, 7vw, 3.25rem);
+      color: var(--primary);
+      font-size: .86rem;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+    .login-form {
+      align-content: center;
+    }
+    .login-form h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 8vw, 2.45rem);
       line-height: 1.05;
       letter-spacing: 0;
     }
-    .login-benefits {
-      display: grid;
-      gap: .55rem;
-      margin: .2rem 0 0;
-      padding-left: 1.1rem;
-    }
-    .login-form {
-      display: grid;
-      align-content: center;
-      gap: .65rem;
-    }
-    .login-form h2,
-    .drawer-heading h2 {
-      margin: 0;
-      line-height: 1.15;
-    }
     .login-form input {
       width: 100%;
-      min-height: 2.75rem;
+      min-height: 3rem;
       border: 1px solid var(--border);
       border-radius: 7px;
-      padding: .7rem .8rem;
+      padding: .75rem .85rem;
       background: var(--surface);
       color: var(--text);
       font: inherit;
+    }
+    .login-form button {
+      width: 100%;
+      min-height: 3rem;
+      justify-content: center;
+      margin-top: .15rem;
     }
     .auth-note {
       color: var(--muted);
       font-size: .92rem;
       margin: .1rem 0 0;
-    }
-    .auth-actions {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-top: .35rem;
     }
 
     .topbar {
@@ -199,6 +196,7 @@
       top: 0;
       z-index: 30;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
@@ -226,13 +224,22 @@
       box-shadow: var(--shadow);
       font-weight: 900;
     }
-    .top-actions { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: .5rem;
+      flex-wrap: wrap;
+      min-width: 0;
+      flex: 0 1 auto;
+    }
+    .top-actions > * { min-width: 0; }
     .top-left {
       display: inline-flex;
       align-items: center;
       gap: .75rem;
       min-width: 0;
-      flex: 1 1 auto;
+      flex: 1 1 16rem;
     }
     .home-button {
       display: inline-flex;
@@ -271,6 +278,7 @@
     }
     .profile-button {
       width: auto;
+      max-width: 100%;
       display: inline-flex;
       align-items: center;
       gap: .45rem;
@@ -279,6 +287,7 @@
       border-radius: 999px;
       font-weight: 850;
       background: var(--surface);
+      flex: 0 1 auto;
     }
     .profile-dot,
     .profile-avatar-large {
@@ -295,6 +304,20 @@
       width: 1.85rem;
       height: 1.85rem;
       font-size: .82rem;
+    }
+    .settings-symbol {
+      width: 1.85rem;
+      height: 1.85rem;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--surface-2);
+      color: var(--primary);
+      flex: 0 0 auto;
+    }
+    .settings-symbol svg {
+      width: 1.05rem;
+      height: 1.05rem;
     }
     .profile-avatar-large {
       width: 3.1rem;
@@ -315,6 +338,20 @@
       color: var(--muted);
       font-size: .92rem;
       overflow-wrap: anywhere;
+    }
+    .profile-label {
+      margin: 0;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .profile-summary .auth-user {
+      margin: 0;
+      color: var(--text);
+      font-size: 1.16rem;
+      line-height: 1.2;
     }
     .profile-actions {
       margin-top: .15rem;
@@ -345,7 +382,7 @@
       gap: 1.25rem;
       width: min(1440px, 100%);
       margin: 0 auto;
-      padding: 1.25rem clamp(1rem, 3vw, 2rem) 3rem;
+      padding: clamp(.8rem, 2.5vw, 1.25rem) clamp(.8rem, 3vw, 2rem) 3rem;
     }
     .sidebar {
       position: sticky;
@@ -358,6 +395,7 @@
       border-radius: var(--radius);
       background: var(--surface);
       box-shadow: var(--shadow);
+      min-width: 0;
     }
     .sidebar h2 { font-size: .95rem; margin: .2rem .35rem .65rem; }
     .nav-list { display: grid; gap: .25rem; margin: 0; padding: 0; list-style: none; }
@@ -413,7 +451,7 @@
     }
     .hero h1 {
       margin: 0 0 .8rem;
-      font-size: 3.5rem;
+      font-size: clamp(2.15rem, 5.5vw, 3.5rem);
       line-height: 1.04;
       letter-spacing: 0;
     }
@@ -536,6 +574,8 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
       gap: .9rem;
+      width: 100%;
+      min-width: 0;
     }
     .module-card, .stat-card, .example-block, .question-panel {
       border: 1px solid var(--border);
@@ -564,6 +604,7 @@
       line-height: 1.15;
       font-weight: 800;
       overflow-wrap: anywhere;
+      white-space: normal;
     }
     .badge.success { background: color-mix(in srgb, var(--success) 18%, var(--surface)); color: var(--success); }
     .badge.warning { background: color-mix(in srgb, var(--warning) 18%, var(--surface)); color: var(--warning); }
@@ -596,6 +637,7 @@
       flex-wrap: wrap;
       border-bottom: 1px solid var(--border);
       margin-top: 1rem;
+      min-width: 0;
     }
     .tab {
       border-bottom-left-radius: 0;
@@ -663,6 +705,7 @@
     label { display: block; font-weight: 800; margin-bottom: .25rem; }
     input, select, textarea {
       width: 100%;
+      min-width: 0;
       min-height: 2.75rem;
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -691,8 +734,14 @@
       padding: .65rem;
       border: 1px solid var(--border);
       border-radius: var(--radius);
+      min-width: 0;
     }
-    .answer-options input { width: auto; min-height: auto; }
+    .answer-options input {
+      width: auto;
+      min-width: auto;
+      min-height: auto;
+      flex: 0 0 auto;
+    }
     .feedback {
       min-height: 3rem;
       margin-top: .8rem;
@@ -720,8 +769,9 @@
       z-index: 60;
       display: none;
       width: min(26rem, calc(100vw - 2rem));
-      max-height: calc(100vh - 6rem);
+      max-height: calc(100dvh - 6rem);
       overflow: auto;
+      overscroll-behavior: contain;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
@@ -819,6 +869,7 @@
     .chart {
       width: 100%;
       min-height: 12rem;
+      overflow-x: auto;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
@@ -979,22 +1030,25 @@
       .login-gate {
         align-items: start;
       }
-      .login-card,
       .theory-hero,
       .example-split {
         grid-template-columns: 1fr;
       }
-      .auth-actions,
       .segmented {
         grid-template-columns: 1fr;
-      }
-      .login-intro h1 {
-        font-size: 2.35rem;
       }
       .profile-drawer {
         right: .75rem;
         left: .75rem;
         width: auto;
+      }
+      .stat-bar {
+        grid-template-columns: minmax(0, 1fr);
+        gap: .35rem;
+      }
+      .question-progress-line {
+        display: grid;
+        gap: .25rem;
       }
     }
 
@@ -1028,6 +1082,7 @@
       vertical-align: baseline;
     }
     .math-block {
+      width: 100%;
       max-width: 100%;
       overflow-x: auto;
     }
@@ -1138,9 +1193,9 @@
       .sidebar {
         display: none;
         position: fixed;
-        inset: 4.5rem 1rem auto 1rem;
+        inset: 4.8rem 1rem auto 1rem;
         z-index: 55;
-        max-height: calc(100vh - 5.5rem);
+        max-height: calc(100dvh - 5.8rem);
       }
       .sidebar.open { display: block; }
       .mobile-only { display: inline-flex; }
@@ -1149,21 +1204,162 @@
     }
 
     @media (max-width: 620px) {
-      .topbar { align-items: center; gap: .6rem; padding-inline: .75rem; }
-      .top-left { gap: .45rem; }
+      .topbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: stretch;
+        gap: .65rem;
+        padding: .65rem .75rem;
+      }
+      .top-left {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: .45rem;
+      }
+      .top-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 2.75rem minmax(0, 1fr) minmax(0, 1fr);
+        gap: .5rem;
+      }
       .home-button { width: 2.75rem; min-width: 2.75rem; padding-inline: 0; border-radius: 50%; }
       .home-button span { display: none; }
-      .profile-button { max-width: 8.75rem; }
-      .profile-text { max-width: 4.4rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .top-actions .profile-button {
+        width: 100%;
+        justify-content: center;
+        padding-inline: .45rem;
+      }
+      .profile-text {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
       .brand span:last-child { display: none; }
-      .section { padding: 1rem; }
+      .layout { padding: .75rem .75rem 2rem; }
+      .sidebar {
+        inset: 6.35rem .75rem auto .75rem;
+        max-height: calc(100dvh - 7.1rem);
+      }
+      .drawer {
+        top: 6.35rem;
+        right: .75rem;
+        left: .75rem;
+        width: auto;
+        max-height: calc(100dvh - 7.1rem);
+        padding: .75rem;
+      }
+      .section {
+        margin-top: .85rem;
+        padding: .9rem;
+      }
       .module-card { min-height: auto; }
+      .hero {
+        gap: .85rem;
+        padding: 1rem;
+      }
+      .hero-visual {
+        max-height: 14rem;
+      }
+      .toolbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: stretch;
+        gap: .65rem;
+      }
+      .toolbar > *,
+      .toolbar > div,
+      .toolbar input {
+        width: 100%;
+      }
+      .hero-actions,
+      .button-row,
+      .practice-controls,
+      .settings-grid,
+      .question-actions {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+      }
       .button, button { width: 100%; }
+      .top-actions button,
+      .top-actions .button {
+        width: 100%;
+      }
       .icon-button { width: 2.75rem; min-width: 2.75rem; }
       .hero h1 { font-size: 2.1rem; }
-      .top-actions .button:not(.mobile-only), .top-actions button:not(.mobile-only):not(.icon-button) { width: auto; }
       .tab-list { display: grid; grid-template-columns: 1fr 1fr; }
-      .tab { min-width: 0; }
+      .tab {
+        min-width: 0;
+        border-radius: var(--radius);
+        border-bottom: 1px solid var(--border);
+      }
+      details,
+      .drawer-section {
+        padding: .75rem;
+      }
+      .steps li {
+        grid-template-columns: 1.65rem minmax(0, 1fr);
+      }
+      .steps b {
+        width: 1.65rem;
+        height: 1.65rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .login-card {
+        padding: 1rem;
+      }
+      .login-form h1 {
+        font-size: clamp(1.65rem, 10vw, 2rem);
+      }
+      .topbar {
+        padding-inline: .6rem;
+      }
+      .top-actions {
+        gap: .4rem;
+      }
+      .settings-symbol,
+      .profile-dot {
+        width: 1.55rem;
+        height: 1.55rem;
+      }
+      .profile-text {
+        font-size: .88rem;
+      }
+      .layout {
+        padding-inline: .6rem;
+      }
+      .sidebar {
+        inset: 6.25rem .6rem auto .6rem;
+        max-height: calc(100dvh - 6.9rem);
+      }
+      .drawer {
+        top: 6.25rem;
+        left: .6rem;
+        right: .6rem;
+        max-height: calc(100dvh - 6.9rem);
+      }
+      .section,
+      .module-card,
+      .stat-card,
+      .example-block,
+      .question-panel,
+      .theory-section,
+      .theory-card {
+        padding: .85rem;
+      }
+      .hero h1 {
+        font-size: 1.85rem;
+      }
+      .tab-list {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .formula {
+        white-space: normal;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1194,28 +1390,15 @@
   </script>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
   <section id="login-gate" class="login-gate" aria-labelledby="login-title">
-    <div class="login-card">
-      <div class="login-intro">
-        <p class="badge">Trilha de Equações</p>
-        <h1 id="login-title">Entre para estudar</h1>
-        <p>Digite seu nome para salvar estatísticas, continuar de onde parou e acompanhar sua evolução em teoria e prática.</p>
-        <ul class="login-benefits">
-          <li>Progresso separado para cada estudante.</li>
-          <li>Caderno de erros e histórico de questões.</li>
-          <li>Sincronização para testar em qualquer dispositivo.</li>
-        </ul>
-      </div>
-      <form id="login-form" class="login-form" autocomplete="on">
-        <h2>Identificação</h2>
-        <p id="gate-status" class="sync-status" data-auth-status aria-live="polite">Digite seu nome para começar.</p>
-        <label for="gate-name">Nome</label>
-        <input id="gate-name" data-auth-name type="text" autocomplete="username" placeholder="Ex.: Bia" maxlength="40">
-        <div class="button-row auth-actions">
-          <button id="gate-signin" class="primary" type="button">Entrar</button>
-        </div>
-        <p class="auth-note">Use sempre o mesmo nome para recuperar suas estatísticas.</p>
-      </form>
-    </div>
+    <form id="login-form" class="login-card login-form" autocomplete="on">
+      <p class="login-kicker">Math</p>
+      <h1 id="login-title">Qual &eacute; o seu nome?</h1>
+      <p id="gate-status" class="sync-status" data-auth-status aria-live="polite">Digite seu nome para come&ccedil;ar.</p>
+      <label for="gate-name">Nome</label>
+      <input id="gate-name" data-auth-name type="text" autocomplete="username" placeholder="Ex.: Bia" maxlength="40" autofocus>
+      <button id="gate-signin" class="primary" type="button">Entrar</button>
+      <p class="auth-note">Se for a primeira vez, sua conta ser&aacute; criada automaticamente.</p>
+    </form>
   </section>
   <div class="app-shell">
 
@@ -1229,7 +1412,11 @@
       </div>
       <div class="top-actions">
         <button id="menu-toggle" class="icon-button mobile-only" type="button" aria-label="Mostrar menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-        <button id="settings-toggle" class="profile-button" type="button" aria-label="Abrir perfil" aria-expanded="false">
+        <button id="settings-toggle" class="profile-button settings-button" type="button" aria-label="Abrir configura&ccedil;&otilde;es" aria-expanded="false">
+          <span class="settings-symbol" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Zm8.2 4.3-.1-1.1 2-1.6-2-3.5-2.5 1a8.2 8.2 0 0 0-.9-.5L16.3 4H7.7l-.4 2.8-.9.5-2.5-1-2 3.5 2 1.6-.1 1.1.1 1.1-2 1.6 2 3.5 2.5-1 .9.5.4 2.8h8.6l.4-2.8.9-.5 2.5 1 2-3.5-2-1.6.1-1.1Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>
+          <span class="profile-text">Ajustes</span>
+        </button>
+        <button id="profile-toggle" class="profile-button" type="button" aria-label="Abrir perfil" aria-expanded="false">
           <span id="profile-initials" class="profile-dot" aria-hidden="true">P</span>
           <span class="profile-text">Perfil</span>
         </button>
@@ -1295,28 +1482,16 @@
       </main>
     </div>
   </div>
-        <aside id="settings-drawer" class="drawer profile-drawer" aria-label="Perfil e leitura">
+        <aside id="settings-drawer" class="drawer profile-drawer" aria-label="Configura&ccedil;&otilde;es de leitura">
       <div class="drawer-heading">
-        <p class="badge">Perfil</p>
-        <h2>Seu espaço</h2>
-        <p>Veja quem está estudando e ajuste a leitura sem mexer no conteúdo.</p>
+        <p class="badge">Configura&ccedil;&otilde;es</p>
+        <h2>Ajustes de leitura</h2>
+        <p>Controle a apresenta&ccedil;&atilde;o da p&aacute;gina sem mexer no conte&uacute;do ou nas estat&iacute;sticas.</p>
       </div>
-
-      <section class="drawer-section profile-summary" aria-labelledby="profile-title">
-        <div class="profile-person">
-          <span id="drawer-profile-initials" class="profile-avatar-large" aria-hidden="true">P</span>
-          <div>
-            <h3 id="profile-title">Estudante</h3>
-            <p id="profile-name" class="auth-user">Aguardando login.</p>
-            <p class="profile-muted">Conta conectada: <strong id="cloud-user">usuário</strong></p>
-          </div>
-        </div>
-        <p id="sync-status" class="sync-status" data-auth-status aria-live="polite">Supabase não configurado.</p>
-      </section>
 
       <section class="drawer-section reading-panel" aria-labelledby="reading-title">
         <h3 id="reading-title">Leitura</h3>
-        <p>Escolha uma apresentação confortável. O conteúdo e as estatísticas continuam os mesmos.</p>
+        <p>Escolha uma apresenta&ccedil;&atilde;o confort&aacute;vel. O conte&uacute;do e as estat&iacute;sticas continuam os mesmos.</p>
         <label>Tamanho do texto</label>
         <div class="segmented" role="group" aria-label="Tamanho do texto">
           <button type="button" data-action="set-font" data-font="small">Compacto</button>
@@ -1324,19 +1499,39 @@
           <button type="button" data-action="set-font" data-font="large">Maior</button>
         </div>
         <label>Tema</label>
-        <div class="segmented" role="group" aria-label="Tema da página">
+        <div class="segmented" role="group" aria-label="Tema da p&aacute;gina">
           <button type="button" data-action="set-theme" data-theme="auto">Auto</button>
           <button type="button" data-action="set-theme" data-theme="light">Claro</button>
           <button type="button" data-action="set-theme" data-theme="dark">Escuro</button>
         </div>
         <div class="reading-preview" aria-hidden="true">
-          <strong>Prévia</strong>
-          <span>Equações ficam mais fáceis quando cada transformação preserva o equilíbrio.</span>
+          <strong>Pr&eacute;via</strong>
+          <span>Equa&ccedil;&otilde;es ficam mais f&aacute;ceis quando cada transforma&ccedil;&atilde;o preserva o equil&iacute;brio.</span>
         </div>
       </section>
+    </aside>
 
-      <section class="drawer-section profile-actions" aria-label="Sessão">
-        <p>Sair encerra esta sessão e volta para a tela inicial de nome.</p>
+        <aside id="profile-drawer" class="drawer profile-drawer" aria-label="Perfil">
+      <div class="drawer-heading">
+        <p class="badge">Perfil</p>
+        <h2 id="profile-title">Conta</h2>
+        <p>Veja a sess&atilde;o ativa e encerre o acesso quando terminar.</p>
+      </div>
+
+      <section class="drawer-section profile-summary" aria-labelledby="profile-title">
+        <div class="profile-person">
+          <span id="drawer-profile-initials" class="profile-avatar-large" aria-hidden="true">P</span>
+          <div>
+            <p class="profile-label">Conta conectada</p>
+            <h3 id="cloud-user" class="auth-user">Aguardando login.</h3>
+            <p id="profile-name" class="profile-muted">Progresso e estat&iacute;sticas deste estudante.</p>
+          </div>
+        </div>
+        <p id="sync-status" class="sync-status" data-auth-status aria-live="polite">Verificando conex&atilde;o...</p>
+      </section>
+
+      <section class="drawer-section profile-actions" aria-label="Sess&atilde;o">
+        <p>Sair encerra esta sess&atilde;o e volta para a tela inicial de nome.</p>
         <button id="auth-signout" class="signout-button" type="button">Sair da conta</button>
       </section>
     </aside>
@@ -1353,6 +1548,7 @@
   const DATA = JSON.parse(document.getElementById('page-data').textContent);
   const NS = 'plataformaEquacoes.v1';
   const SESSION_UNLOCK_KEY = NS + ':sessionUnlocked';
+  const SESSION_NAME_KEY = NS + ':sessionName';
   const DEFAULT_SUPABASE_TABLE = 'user_progress';
   const SUPABASE_FALLBACK_CONFIG = {
     url: 'https://ddsjqdiehcjcejcxkkvx.supabase.co',
@@ -1772,13 +1968,29 @@
     btn.setAttribute('aria-expanded', String(open));
   }
 
-  function toggleSettings() {
-    const drawer = byId('settings-drawer');
-    const btn = byId('settings-toggle');
+  function closeDrawer(drawerId, buttonId) {
+    const drawer = byId(drawerId);
+    const btn = byId(buttonId);
+    if (drawer) drawer.classList.remove('open');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggleDrawer(drawerId, buttonId, otherDrawerId, otherButtonId) {
+    const drawer = byId(drawerId);
+    const btn = byId(buttonId);
     if (!drawer || !btn) return;
     const open = !drawer.classList.contains('open');
+    if (open) closeDrawer(otherDrawerId, otherButtonId);
     drawer.classList.toggle('open', open);
     btn.setAttribute('aria-expanded', String(open));
+  }
+
+  function toggleSettings() {
+    toggleDrawer('settings-drawer', 'settings-toggle', 'profile-drawer', 'profile-toggle');
+  }
+
+  function toggleProfile() {
+    toggleDrawer('profile-drawer', 'profile-toggle', 'settings-drawer', 'settings-toggle');
   }
 
   function setupSettings() {
@@ -1861,12 +2073,44 @@
     return 'MathBia-' + loginSlug(name) + '-acesso-2026';
   }
 
+  function normalizeDisplayName(name) {
+    return safeText(name).trim().replace(/\s+/g, ' ');
+  }
+
+  function sessionDisplayName() {
+    try { return normalizeDisplayName(sessionStorage.getItem(SESSION_NAME_KEY) || ''); } catch (error) { return ''; }
+  }
+
+  function setSessionDisplayName(name) {
+    const clean = normalizeDisplayName(name);
+    try {
+      if (clean) sessionStorage.setItem(SESSION_NAME_KEY, clean);
+      else sessionStorage.removeItem(SESSION_NAME_KEY);
+    } catch (error) {}
+  }
+
+  function emailDisplayName(user) {
+    const slug = user && user.email ? safeText(user.email.split('@')[0]) : '';
+    if (!slug) return '';
+    return slug
+      .split('-')
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
+  }
+
   function userDisplayName(user) {
     if (!user) return 'Aguardando login.';
+    const typedName = sessionDisplayName();
+    if (typedName) return typedName;
     const meta = user.user_metadata || {};
-    if (meta.display_name) return meta.display_name;
-    if (meta.login_name) return meta.login_name;
-    return user.email ? user.email.split('@')[0] : 'Conta conectada';
+    const emailName = emailDisplayName(user);
+    const metaName = normalizeDisplayName(meta.display_name || '');
+    if (metaName && (!emailName || loginSlug(metaName) === loginSlug(emailName))) return metaName;
+    if (emailName) return emailName;
+    if (metaName) return metaName;
+    if (meta.login_name) return emailDisplayName({ email: meta.login_name + '@mathbia.local' });
+    return 'Conta conectada';
   }
 
   function initialsFromName(name) {
@@ -1893,6 +2137,21 @@
     } catch (error) {}
   }
 
+  function showLoginGate(message) {
+    setSessionUnlocked(false);
+    setSessionDisplayName('');
+    cloudState.user = null;
+    switchAccountStorage('');
+    closeDrawer('profile-drawer', 'profile-toggle');
+    closeDrawer('settings-drawer', 'settings-toggle');
+    qsa('[data-auth-name]').forEach((input) => {
+      input.value = '';
+    });
+    renderCloudPanel();
+    setSyncStatus(message || 'Digite seu nome para come\u00e7ar.', 'muted', false);
+    const nameInput = byId('gate-name');
+    if (nameInput) window.setTimeout(() => nameInput.focus(), 0);
+  }
   function renderCloudPanel() {
     const configured = hasSupabaseConfig() && Boolean(window.supabase && window.supabase.createClient);
     cloudState.configured = configured;
@@ -1906,8 +2165,8 @@
     const initials = initialsFromName(displayName);
     const loginGate = byId('login-gate');
     if (loginGate) loginGate.hidden = signedIn;
-    if (cloudUser && signedIn) cloudUser.textContent = displayName;
-    if (profileName) profileName.textContent = displayName;
+    if (cloudUser) cloudUser.textContent = signedIn ? displayName : 'Aguardando login.';
+    if (profileName) profileName.textContent = signedIn ? 'Progresso e estat\u00edsticas deste estudante.' : 'Entre com seu nome para salvar estat\u00edsticas.';
     if (profileInitials) profileInitials.textContent = initials;
     if (drawerInitials) drawerInitials.textContent = initials;
     if (signedIn) syncNameFields(displayName);
@@ -1926,9 +2185,9 @@
   function authFields(scope) {
     const root = typeof scope === 'string' ? document.querySelector(scope) : (scope && scope.querySelector ? scope : document);
     const nameInput = root ? root.querySelector('[data-auth-name]') : null;
-    const loginName = nameInput ? nameInput.value.trim().replace(/\s+/g, ' ') : '';
+    const loginName = nameInput ? normalizeDisplayName(nameInput.value) : '';
     if (loginName.length < 2) {
-      setSyncStatus('Informe um nome com pelo menos 2 caracteres.', 'warning', true);
+      setSyncStatus('Digite pelo menos 2 letras.', 'warning', true);
       if (nameInput) nameInput.focus();
       return null;
     }
@@ -2021,7 +2280,7 @@
     setSyncStatus('Entrando...', 'muted', false);
     let response = await client.auth.signInWithPassword({ email: fields.email, password: fields.password });
     if (response.error) {
-      setSyncStatus('Criando acesso para este nome...', 'muted', false);
+      setSyncStatus('Nome novo. Criando conta...', 'muted', false);
       response = await client.auth.signUp({
         email: fields.email,
         password: fields.password,
@@ -2043,6 +2302,7 @@
       setSessionUnlocked(true);
       cloudState.user = response.data.user;
     }
+    setSessionDisplayName(fields.displayName);
     switchAccountStorage(cloudState.user ? cloudState.user.id : '');
     renderCloudPanel();
     await pullCloudProgress();
@@ -2050,13 +2310,13 @@
 
   async function signOutCloud() {
     const client = getSupabaseClient();
+    showLoginGate('Conta desconectada. Digite seu nome para entrar.');
     if (!client) return;
-    await client.auth.signOut();
-    setSessionUnlocked(false);
-    cloudState.user = null;
-    switchAccountStorage('');
-    renderCloudPanel();
-    setSyncStatus('Conta desconectada.', 'muted', true);
+    try {
+      await client.auth.signOut();
+    } catch (error) {
+      setSyncStatus('Conta desconectada neste dispositivo.', 'muted', false);
+    }
   }
 
   async function setupCloudSync() {
@@ -2792,6 +3052,8 @@
     if (menu) menu.addEventListener('click', toggleSidebar);
     const settings = byId('settings-toggle');
     if (settings) settings.addEventListener('click', toggleSettings);
+    const profile = byId('profile-toggle');
+    if (profile) profile.addEventListener('click', toggleProfile);
     document.addEventListener('click', (event) => {
       const copyValue = event.target.closest('[data-copy]');
       if (copyValue) copyText(copyValue.getAttribute('data-copy'));
