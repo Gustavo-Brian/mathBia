@@ -1185,6 +1185,13 @@
   </style>
 </head>
 <body class="auth-locked">
+  <script>
+    try {
+      if (sessionStorage.getItem('plataformaEquacoes.v1:sessionUnlocked') === '1') {
+        document.body.classList.remove('auth-locked');
+      }
+    } catch (error) {}
+  </script>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
   <section id="login-gate" class="login-gate" aria-labelledby="login-title">
     <div class="login-card">
@@ -2053,7 +2060,8 @@
   }
 
   async function setupCloudSync() {
-    renderCloudPanel();
+    const alreadyUnlocked = sessionUnlocked();
+    if (!alreadyUnlocked) renderCloudPanel();
     const gateSignIn = byId('gate-signin');
     const signOut = byId('auth-signout');
     const loginForm = byId('login-form');
